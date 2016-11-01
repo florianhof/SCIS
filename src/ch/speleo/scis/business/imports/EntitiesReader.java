@@ -113,6 +113,7 @@ public class EntitiesReader {
         	}
 		}
 		reader.close();
+		XPersistence.commit();
 
         StrBuilder message = new StrBuilder();
         message.append("--> READ ");

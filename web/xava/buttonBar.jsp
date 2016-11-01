@@ -164,10 +164,17 @@ if (manager.isButtonBarVisible()) {
 			suffix;
 	} 	
 	if (style.isHelpAvailable()) {
-		String helpImage = !style.getHelpImage().startsWith("/")?request.getContextPath() + "/" + style.getHelpImage():style.getHelpImage();
+		String helpImage = null;
+		if (style.getHelpImage() != null) helpImage = !style.getHelpImage().startsWith("/")?request.getContextPath() + "/" + style.getHelpImage():style.getHelpImage();
 	%>
 		<span class="<%=style.getHelp()%>">  
-			<a href="<%=href%>" target="<%=target%>"><img src="<%=helpImage%>"/></a>
+			<a href="<%=href%>" target="<%=target%>">
+				<% if (helpImage == null) { %>
+				<i class="mdi mdi-help-circle"/></i>
+				<% } else { %>
+				<a href="<%=href%>" target="<%=target%>"><img src="<%=helpImage%>"/></a>
+				<% } %>
+			</a>
 		</span>
 	<%
 	}

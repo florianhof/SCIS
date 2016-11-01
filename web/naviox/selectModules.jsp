@@ -3,13 +3,14 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.openxava.util.Is"%>
+<%@page import="org.openxava.util.Strings"%> 
 <%@page import="org.openxava.application.meta.MetaModule"%>
 
 <jsp:useBean id="modules" class="com.openxava.naviox.Modules" scope="session"/>
 
 <%
 String searchWord = request.getParameter("searchWord");
-searchWord = searchWord == null?"":searchWord.toLowerCase(); 
+searchWord = searchWord == null?"":Strings.removeAccents(searchWord.toLowerCase()); 
 Collection modulesList = null;
 boolean bookmarkModules = false;
 %>
@@ -28,11 +29,12 @@ for (Iterator it= modulesList.iterator(); it.hasNext();) {
 	String selected = module.getName().equals(modules.getCurrent())?"selected":"";
 	String label = module.getLabel(request.getLocale()); 
 	String description = module.getDescription(request.getLocale());
-		
-	if (!Is.emptyString(searchWord) && !label.toLowerCase().contains(searchWord) && !description.toLowerCase().toLowerCase().contains(searchWord)) continue;  
+	String normalizedLabel = Strings.removeAccents(label.toLowerCase()); 
+	String normalizedDescription = Strings.removeAccents(description.toLowerCase());
+	if (!Is.emptyString(searchWord) && !normalizedLabel.contains(searchWord) && !normalizedDescription.contains(searchWord)) continue;
 	counter++;
 %>
-	<a  href="<%=modules.getModuleURI(request, module)%>">
+	<a  href="javascript:void(0)" onclick="window.location='<%=modules.getModuleURI(request, module)%>'">
 	<div id="<%=module.getName()%>_module" class="module-row <%=selected%>" onclick="$('#<%=module.getName()%>_loading').show()">	
 		<div class="module-name">
 			<%=label%>

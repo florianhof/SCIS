@@ -9,7 +9,8 @@ import org.apache.commons.logging.LogFactory;
 
 import ch.speleo.scis.business.imports.EntitiesReader.EntityConverter;
 import ch.speleo.scis.business.imports.ReaderHelper.ConversionResult;
-import ch.speleo.scis.model.common.Karstologist;
+import ch.speleo.scis.model.common.*;
+import ch.speleo.scis.model.conservation.*;
 import ch.speleo.scis.model.karst.GroundObject;
 import ch.speleo.scis.model.karst.SpeleoObject;
 

@@ -21,7 +21,7 @@ public class DataImporter {
 	private static final Log logger = LogFactory.getLog(DataImporter.class);
 	static {		
 		XSystem._setLogLevelFromJavaLoggingLevelOfXavaPreferences();
-		XPersistence.setPersistenceUnit("junit"); // "junit" for dev, "remote" for test and prod
+		XPersistence.setPersistenceUnit("remote"); // "junit" for dev, "remote" for test and prod
 		// for test and prod, a SSH tunnel is required: ssh -L 55432:localhost:5432 sgharchiv@sgharchiv.ogh.ch
 		Locale.setDefault(Locale.ENGLISH);
 	}
@@ -60,7 +60,9 @@ public class DataImporter {
             //		new SpeleoObjectConverter(), true);
             //importer.read(new ExcelReader(importFolder+"Cavites_VD_VS_FR_BE_export.xls", 1), 
             //		new SpeleoObjectConverter(), false);
-            importer.read(new ExcelReader(importFolder+"Inventaire-Ouest_2016-04-21.xls", 1), 
+            //importer.read(new ExcelReader(importFolder+"Inventaire-Ouest_2016-04-21.xls", 1), 
+            //		new SpeleoObjectConverter(), true);
+            importer.read(new ExcelReader(importFolder+"Import_Cavites-BE_GSL-2016-04-22.xls", 1), 
             		new SpeleoObjectConverter(), true);
             
             // entrances, trial with old data
@@ -74,7 +76,9 @@ public class DataImporter {
             //		new EntranceConverter(), true);
             //importer.read(new ExcelReader(importFolder+"Cavites_VD_VS_FR_BE_export.xls", 1), 
             //		new EntranceConverter(), false);
-            importer.read(new ExcelReader(importFolder+"Inventaire-Ouest_2016-04-21.xls", 1), 
+            //importer.read(new ExcelReader(importFolder+"Inventaire-Ouest_2016-04-21.xls", 1), 
+            //		new EntranceConverter(), true);
+            importer.read(new ExcelReader(importFolder+"Import_Cavites-BE_GSL-2016-04-22.xls", 1), 
             		new EntranceConverter(), true);
 
             // documents

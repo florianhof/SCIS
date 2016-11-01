@@ -34,6 +34,13 @@ while (it.hasNext()) {
 }
 %>
 
+<%  
+MetaAction defaultMetaAction = manager.getDefaultMetaAction();
+if (defaultMetaAction != null) {
+%>
 <button name="xava.DEFAULT_ACTION" type="submit" 
-	onclick="openxava.executeAction('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '', false, '<%=manager.getDefaultActionQualifiedName()%>')"
+	onclick="openxava.executeAction('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=defaultMetaAction.getConfirmMessage(request)%>', <%=defaultMetaAction.isConfirm()%>, '<%=manager.getDefaultActionQualifiedName()%>')"
 	style="padding: 0; border: none; background-color:transparent; size: 0"></button>
+<%
+}
+%>	

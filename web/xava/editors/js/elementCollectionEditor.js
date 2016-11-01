@@ -23,6 +23,9 @@ elementCollectionEditor.onChangeRow = function(element, rowIndex) {
 	token1 = new RegExp(", " + (rowIndex + 1) + "\\)", "g");
 	token2 = ", " + (rowIndex + 2) + ")";
 	newRowHtml = newRowHtml.replace(token1, token2);
+	token1 = new RegExp(", this, " + (rowIndex + 1) + ", ", "g");
+	token2 = ", this, " + (rowIndex + 2) + ", ";
+	newRowHtml = newRowHtml.replace(token1, token2);
 	newRow.html(newRowHtml);
 	var table = currentRow.parent().parent();	
 	elementCollectionEditor.setDefaultValues(table, rowIndex); 
@@ -52,14 +55,15 @@ elementCollectionEditor.removeRow = function(application, module, element, rowIn
 }
 
 elementCollectionEditor.renumber = function(row, rowIndex) { 
-	if (!$(row).is(":visible")) return; 			
 	var token1 = new RegExp("__\\d+", "g");
 	var token2 = "__" + rowIndex;
 	row.attr("id", row.attr("id").replace(token1, token2));
 	row.find('input').each(function(){	    
 	    $(this).attr('value',$(this).val());	    
 	});
-	var rowHtml = row.html().replace(token1, token2).replace(new RegExp("this, \\d+,", "g"), "this, " + rowIndex + ","); 
+	var rowHtml = row.html().replace(token1, token2).replace(new RegExp("this, \\d+", "g"), "this, " + rowIndex); 
 	row.html(rowHtml);	
-	elementCollectionEditor.renumber(row.next(), rowIndex + 1);
+	if ($(row).is(":visible")) { 
+		elementCollectionEditor.renumber(row.next(), rowIndex + 1);
+	}
 }

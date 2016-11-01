@@ -4,21 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import javax.persistence.*;
 
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -38,9 +24,8 @@ import org.openxava.calculators.CurrentDateCalculator;
 import org.openxava.calculators.TrueCalculator;
 import org.openxava.util.Labels;
 
-import ch.speleo.scis.model.common.GenericIdentityWithDeleted;
-import ch.speleo.scis.model.common.Identifiable;
-import ch.speleo.scis.model.common.Karstologist;
+import ch.speleo.scis.model.common.*;
+import ch.speleo.scis.model.conservation.*;
 
 /**
  * Class representing an object in the cave (generic object like an entrance, 
@@ -62,7 +47,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
      * Serial version UID.
      */
     private static final long serialVersionUID = 11992881712762616L;
-
+    
     /**
      * Name of the karst object.
      */
@@ -112,7 +97,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
 	@DisplaySize(value=100) 
     private String dataHistory;
     /**
-     * Document(s) available for this object. 
+     * Document(s) available for this object
      */
     @OneToOne(mappedBy = "object", optional = true, cascade = {CascadeType.ALL}, orphanRemoval=true)
     @ReferenceView(value = "Short")
@@ -126,19 +111,19 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     @Transient // for future use 
     private String edataFolderName;
     /**
-     * Has been verified after the import.
+     * Has been verified after the import
      */
     @Column(name = "VERIFIED", nullable = false)
     @DefaultValueCalculator(TrueCalculator.class)
     private Boolean verified;
 
     /**
-     * Empty constructor.
+     * Empty constructor
      */
     public KarstObject() { }
 
 	/**
-     * @return name of the karst object.
+     * @return name of the karst object
      */
     public String getName() {
         return name;
@@ -148,6 +133,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
 	public String getBusinessId() {
 		return getName();
 	}
+	
     /**
      * @param name name of the karst object.
      */

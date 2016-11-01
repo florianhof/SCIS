@@ -23,6 +23,7 @@ import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 
+import ch.speleo.scis.model.common.*;
 import ch.speleo.scis.persistence.utils.SimpleQueries;
 
 /**

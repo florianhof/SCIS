@@ -54,7 +54,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Date when the karst object started being protected.
      */
-    @Column(name = "START_DATE", nullable = true)
+    @Column(name = "START_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     //@Required
     private Date startDate;
@@ -69,7 +69,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Why we decided to protect the given karst object.
      */
-    @Column(name = "REASON", nullable = true)    
+    @Column(name = "REASON", nullable = false)    
     //@Required @NotEmpty
 	@DisplaySize(value=100) 
     private String reason;

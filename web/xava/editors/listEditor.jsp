@@ -56,7 +56,6 @@ else {
 String sfilter = request.getParameter("filter");
 boolean filter = !"false".equals(sfilter);
 String displayFilter = tab.isFilterVisible()?"":"none";
-String displayFilterButton = tab.isFilterVisible()?"none":"";
 String lastRow = request.getParameter("lastRow");
 boolean singleSelection="true".equalsIgnoreCase(request.getParameter("singleSelection"));
 String onSelectCollectionElementAction = view.getOnSelectCollectionElementAction();
@@ -116,14 +115,19 @@ if (tab.isTitleVisible()) {
 <th class="<%=style.getListHeaderCell()%>" style="text-align: center">
 <nobr>
 	<% if (tab.isCustomizeAllowed()) { %>
-	<a  id="<xava:id name='<%="customize_" + id%>'/>" href="javascript:openxava.customizeList('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%="customize_" + id%>')" title="<xava:message key='customize_list'/>"><img align='absmiddle' 
-		src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getCustomizeListImage()%>' border='0' /></a>			
+	<a  id="<xava:id name='<%="customize_" + id%>'/>" href="javascript:openxava.customizeList('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=id%>')" title="<xava:message key='customize_list'/>" class="<%=style.getActionImage()%>">
+		<i class="mdi mdi-settings"></i>
+	</a>	
 	<%
 		if (tab.isCustomizeAllowed()) { 
 	%>
 	<span class="<xava:id name='<%="customize_" + id%>'/>" style="display: none;">
-	<a id="<xava:id name='<%="show_filter_" + id%>'/>" style="display: <%=displayFilterButton%>" href="javascript:openxava.setFilterVisible('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=id%>', '<%=tabObject%>', true)" title="<xava:message key='show_filters'/>"><img id="<xava:id name='<%="filter_image_" + id%>'/>" align='middle' 
-		src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getShowFilterImage()%>' border='0' /></a>	
+	<a id="<xava:id name='<%="show_filter_" + id%>'/>" style='display: <%=tab.isFilterVisible()?"none":""%>' href="javascript:openxava.setFilterVisible('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=id%>', '<%=tabObject%>', true)" title="<xava:message key='show_filters'/>">
+		<i id="<xava:id name='<%="filter_image_" + id%>'/>" class="mdi mdi-filter"></i>
+	</a>
+	<a id="<xava:id name='<%="hide_filter_" + id%>'/>" style='display: <%=tab.isFilterVisible()?"":"none"%>' href="javascript:openxava.setFilterVisible('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=id%>', '<%=tabObject%>', false)" title="<xava:message key='hide_filters'/>">
+		<i id="<xava:id name='<%="filter_image_" + id%>'/>" class="mdi mdi-filter-remove"></i>  
+	</a>	
 	<xava:image action="List.addColumns" argv="<%=collectionArgv%>"/>
 	</span>	
 	<%
@@ -166,8 +170,7 @@ while (it.hasNext()) {
 	if (tab.isCustomizeAllowed()) {
 %>
 <span class="<xava:id name='<%="customize_" + id%>'/>" style="display: none;">
-<img class="xava_handle" align='absmiddle' 
-	src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getMoveColumnImage()%>' border='0' />
+<i class="xava_handle mdi mdi-cursor-move"></i>
 </span>
 <%
 	}
@@ -187,28 +190,30 @@ while (it.hasNext()) {
 <%
 	if (tab.isOrderAscending(property.getQualifiedName())) {
 %>
-<img src="<%=request.getContextPath()%>/xava/images/<%=style.getAscendingImage()%>" border="0" align="middle"/>
+
+<i class="<%=style.getSortIndicator()%> mdi mdi-arrow-down-bold"></i>
 <%
 	}
 %>
 <%
 	if (tab.isOrderDescending(property.getQualifiedName())) {
 %>
-<img src="<%=request.getContextPath()%>/xava/images/<%=style.getDescendingImage()%>" border="0" align="middle"/>
+<i class="<%=style.getSortIndicator()%> mdi mdi-arrow-up-bold"></i>
 <%
 	}
 %>
 <%
 	if (tab.isOrderAscending2(property.getQualifiedName())) {
 %>
-<img src="<%=request.getContextPath()%>/xava/images/<%=style.getAscending2Image()%>" border="0" align="middle"/>
+<i class="<%=style.getSortIndicator2()%> mdi mdi-arrow-down-bold"></i>
+
 <%
 	}
 %>
 <%
 	if (tab.isOrderDescending2(property.getQualifiedName())) {
 %>
-<img src="<%=request.getContextPath()%>/xava/images/<%=style.getDescending2Image()%>" border="0" align="middle"/>
+<i class="<%=style.getSortIndicator2()%> mdi mdi-arrow-up-bold"></i>
 <%
 	}
 %>	
@@ -218,8 +223,9 @@ while (it.hasNext()) {
 		   if (tab.isCustomizeAllowed()) {
 	%>
 	<span class="<xava:id name='<%="customize_" + id%>'/>" style="display: none;">
-	<a href="javascript:openxava.removeColumn('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<xava:id name='<%=id%>'/>_col<%=columnIndex%>', '<%=tabObject%>')" title="<xava:message key='remove_column'/>"><img align='absmiddle' 
-		src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getRemoveColumnImage()%>' border='0' /></a>			
+	<a href="javascript:openxava.removeColumn('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<xava:id name='<%=id%>'/>_col<%=columnIndex%>', '<%=tabObject%>')" title="<xava:message key='remove_column'/>">
+		<i class="mdi mdi-close-circle"></i>
+	</a>
 	</span>
 <%
 	}
@@ -237,22 +243,13 @@ while (it.hasNext()) {
 %>
 <tr id="<xava:id name='<%="list_filter_" + id%>'/>" class=<%=style.getListSubheader()%> style="display: <%=displayFilter%>">
 <td class="<%=style.getFilterCell()%> <%=style.getListSubheaderCell()%>"> 
-
-	<% if (tab.isCustomizeAllowed()) { %>
-	<span class="<xava:id name='<%="customize_" + id%>'/>" style="display: none;">
-	<a id="<xava:id name='<%="hide_filter_" + id%>'/>" href="javascript:openxava.setFilterVisible('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=id%>', '<%=tabObject%>', false)" title="<xava:message key='hide_filters'/>"><img id="<xava:id name='<%="filter_image_" + id%>'/>"  
-		src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getHideFilterImage()%>' border='0' style='vertical-align:text-top;'/></a>
-	</span>	 
-	<% } %>		
-
 <xava:action action="List.filter" argv="<%=collectionArgv%>"/>
 </td> 
 <td class=<%=style.getListSubheaderCell()%> width="5"> 
 	<a title='<xava:message key="clear_condition_values"/>' href="javascript:void(0)">
-		<img 
+		<i class="mdi mdi-eraser" 
 			id="<xava:id name='<%=prefix + "xava_clear_condition"%>' />" 
-			src='<%=request.getContextPath()%>/xava/images/clear-right.gif'
-			border='0' align='middle' onclick="openxava.clearCondition('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=prefix%>')"/>
+			onclick="openxava.clearCondition('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=prefix%>')"></i>		
 	</a>
 </td> 
 <%
@@ -326,23 +323,20 @@ while (it.hasNext()) {
 		+ "&index=" + iConditionValues
 		+ "&idConditionValue=" + idConditionValue
 		+ "&idConditionValueTo=" + idConditionValueTo;
+	String classConditionValue = isDate?"class='" + style.getDateCalendar() + "'":""; 
 	if (isEmptyComparator) {
 %>
 <br/>
 <%  } %>
 <jsp:include page="<%=urlComparatorsCombo%>" />
 <br/> 
-<nobr>
-<input id="<%=idConditionValue%>" name="<%=idConditionValue%>" class=<%=style.getEditor()%> type="text" maxlength="<%=maxLength%>" size="<%=length%>" value="<%=value%>" placeholder="<%=labelFrom%>" style="<%=styleConditionValue%>; width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;"/><% if (isDate) { %><a href="javascript:showCalendar('<%=idConditionValue%>', '<%=org.openxava.util.Dates.dateFormatForJSCalendar(org.openxava.util.Locales.getCurrent(), isTimestamp)%>'<%=isTimestamp?", '12'":""%>)" style="position: relative; right: 25px; <%=styleConditionValue%>" tabindex="999"><img	
-	src="<%=request.getContextPath() %>/xava/images/calendar.gif" alt="..."
-	style='vertical-align: middle;'/></a>
+<nobr <%=classConditionValue%>>
+<input id="<%=idConditionValue%>" name="<%=idConditionValue%>" class=<%=style.getEditor()%> type="text" maxlength="<%=maxLength%>" size="<%=length%>" value="<%=value%>" placeholder="<%=labelFrom%>" style="<%=styleConditionValue%>; width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;"/><% if (isDate) { %><a href="javascript:showCalendar('<%=idConditionValue%>', '<%=org.openxava.util.Dates.dateFormatForJSCalendar(org.openxava.util.Locales.getCurrent(), isTimestamp)%>'<%=isTimestamp?", '12'":""%>)" style="position: relative; right: 25px; <%=styleConditionValue%>" tabindex="999"><i class="mdi mdi-<%=isTimestamp?"calendar-clock":"calendar"%>"></i></a>
 <% } %>
 </nobr>
 <br/> 
-<nobr>
-<input id="<%=idConditionValueTo%>" name="<%=idConditionValueTo%>" class=<%=style.getEditor()%> type="text" maxlength="<%=maxLength%>" size="<%=length%>" value="<%=valueTo%>" placeholder="<%=labelTo%>" style="<%=styleConditionValueTo%>; width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;"/><% if (isDate) { %><a style="position: relative; right: 25px; <%=styleConditionValueTo%>" href="javascript:showCalendar('<%=idConditionValueTo%>', '<%=org.openxava.util.Dates.dateFormatForJSCalendar(org.openxava.util.Locales.getCurrent(), isTimestamp)%>'<%=isTimestamp?", '12'":""%>)" tabindex="999"><img	
-	src="<%=request.getContextPath() %>/xava/images/calendar.gif" alt="..."
-	style='vertical-align: middle;'/></a>
+<nobr <%=classConditionValue%>>
+<input id="<%=idConditionValueTo%>" name="<%=idConditionValueTo%>" class=<%=style.getEditor()%> type="text" maxlength="<%=maxLength%>" size="<%=length%>" value="<%=valueTo%>" placeholder="<%=labelTo%>" style="<%=styleConditionValueTo%>; width: 100%; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;"/><% if (isDate) { %><a style="position: relative; right: 25px; <%=styleConditionValueTo%>" href="javascript:showCalendar('<%=idConditionValueTo%>', '<%=org.openxava.util.Dates.dateFormatForJSCalendar(org.openxava.util.Locales.getCurrent(), isTimestamp)%>'<%=isTimestamp?", '12'":""%>)" tabindex="999"><i class="mdi mdi-<%=isTimestamp?"calendar-clock":"calendar"%>"></i></a>
 <% } %>
 </nobr>
 	<%			
@@ -598,9 +592,9 @@ if (current > 1) {
 }
 else {
 %>
-<span class='<%=style.getFirst()%>'><span class='<%=style.getPageNavigationArrowDisable()%>'><img 
-	src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getPreviousPageDisableImage()%>' 
-	border=0 align="absmiddle"/></span></span>
+<span class='<%=style.getFirst()%>'><span class='<%=style.getPageNavigationArrowDisable()%>'>
+<i class="mdi mdi-menu-left"></i>
+</span></span>
 <%	
 } 
 %>
@@ -649,9 +643,8 @@ if (!tab.isLastPage()) {
 else {
 %>
 <span class='<%=style.getLast()%>'>
-<span class='<%=style.getPageNavigationArrowDisable()%>'><img 
-	src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getNextPageDisableImage()%>' 
-	border=0 align="absmiddle"/>
+<span class='<%=style.getPageNavigationArrowDisable()%>'>
+<i class="mdi mdi-menu-right"></i>
 </span>
 </span>
 <%	
@@ -662,11 +655,11 @@ else {
 <select id="<xava:id name='<%=id + "_rowCount"%>'/>" class=<%=style.getEditor()%>
 	onchange="openxava.setPageRowCount('<%=request.getParameter("application")%>', '<%=request.getParameter("module")%>', '<%=collection==null?"":collection%>', this)">
 	<% 
-	int [] rowCounts = { 5, 10, 12, 15, 20, 50, 100 }; // The peformance with more than 20 rows is poor for page reloading
+	int [] rowCounts = { 5, 10, 12, 15, 20 }; // The peformance with more than 20 rows is poor for page reloading
 	for (int i=0; i<rowCounts.length; i++) {
 		String selected = rowCounts[i] == tab.getPageRowCount()?"selected='selected'":""; 	
 	%>	
-	<option value="<%=rowCounts[i]%>" <%=selected %>><%=rowCounts[i]%><%=(rowCounts[i]>20)?"!":""%></option>
+	<option value="<%=rowCounts[i]%>" <%=selected %>><%=rowCounts[i]%></option>
 	<%
 	}
 	%>

@@ -9,6 +9,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 import org.openxava.annotations.ReadOnly;
+import org.openxava.annotations.ReferenceView;
 
 import ch.speleo.scis.persistence.utils.SimpleQueries;
 
@@ -31,6 +32,7 @@ extends GenericIdentity {
      * @see #loadAuditedValues(Class)
      */
     @Transient @OneToOne 
+    @ReferenceView(value = "Short")
     @ReadOnly
     private RevisionInfo revision;
 

@@ -3,11 +3,11 @@ package ch.speleo.scis.model.common;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.openxava.annotations.Hidden;
-import org.openxava.annotations.Stereotype;
-import org.openxava.annotations.View;
-
-@View(members = "modificationDate, username")
+import org.openxava.annotations.*;
+@Views({
+	@View(name = "Short", members = "modificationDate, username"), 
+	@View(members = "modificationDate, username")
+})
 public class RevisionInfo implements Serializable {
 
 	private static final long serialVersionUID = -6167475284113314078L;

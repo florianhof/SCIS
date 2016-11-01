@@ -442,6 +442,19 @@ openxava.systemError = function(result) {
 openxava.processKey = function(event) {	
 	if (!event) event = window.event;
 	
+	if (event.keyCode == 13 ) {
+		var textField = $(event.target);
+		var id = $(textField).attr("id");
+		if (/.*_conditionValue___\d+$/.test(id)) {
+			event.returnValue = false;
+			event.preventDefault();
+			var collection = id.split("_")[6];
+			openxava.executeAction(openxava.lastApplication, openxava.lastModule,
+				"", false, "List.filter", "collection=" + collection);
+		}
+		return;
+	}
+	
 	if ( !(event.keyCode >= 112 && event.keyCode <= 123 ||
 			event.ctrlKey || event.altKey || event.shiftKey) ) return;
 	
@@ -461,8 +474,7 @@ openxava.processKey = function(event) {
 		openxava.executeAction(openxava.lastApplication, openxava.lastModule,
 			action.confirmMessage, action.takesLong, action.name);  
 		return;
-	}
-		
+	}	
 }
 
 openxava.getSelectedValues = function(application, module) {  	  		
@@ -511,24 +523,35 @@ openxava.limitLength = function(ev, max) {
 // JavaScript for collections and list
 openxava.setFilterVisible = function(application, module, id, tabObject, visible) { 
     var filter = openxava.getElementById(application, module, "list_filter_" + id); 
-    var link = openxava.getElementById(application, module, "show_filter_" + id);
+    var showLink = openxava.getElementById(application, module, "show_filter_" + id);
+    var hideLink = openxava.getElementById(application, module, "hide_filter_" + id);
     if (visible) {
     	$(filter).fadeIn();
-    	$(link).fadeOut();
+    	$(showLink).hide(); 
+    	$(hideLink).show(); 
     }
     else {
     	$(filter).fadeOut();
-    	$(link).fadeIn();    	
+    	$(hideLink).hide(); 
+    	$(showLink).show(); 
     }
 	Tab.setFilterVisible(application, module, visible, tabObject);
 }
 
 openxava.customizeList = function(application, module, id) { 	
-	var customizeControlsClass = openxava.decorateId(application, module, id);	
+	var customizeControlsClass = openxava.decorateId(application, module, "customize_" + id); 
 	$("." + customizeControlsClass).each(function() {
 		if ($(this).is(":visible")) $(this).fadeOut();
 		else $(this).fadeIn(2000);
 	});
+	var tableId = openxava.decorateId(application, module, id); 
+	var firstRow = $("#" + tableId).children().children(":first"); 
+	if (firstRow.hasClass(openxava.customizeControlsClass)) {			
+		firstRow.removeClass(openxava.customizeControlsClass); 
+	}
+	else {
+		firstRow.addClass(openxava.customizeControlsClass); 
+	}
 }
 
 openxava.removeColumn = function(application, module, columnId, tabObject) {  
@@ -582,7 +605,8 @@ openxava.getFormValues = function(ele) { // A refinement of dwr.util.getFormValu
 				if (ele[i].id) name = ele[i].id;
 				else name = "element" + i;
 				value = openxava.getFormValue(ele[i]);
-			}			
+			}
+			if (reply[name] != null) continue; 
 			if (value != null) { 
 				reply[name] = value;
 			}
@@ -659,18 +683,26 @@ openxava.requestOnChange = function(application, module) {
 openxava.setFocus = function(application, module) {		
 	var form = openxava.getForm(application, module);	
 	var elementName = form.elements[openxava.decorateId(application, module, "xava_focus_property_id")].value;
-	var elementDecoratedName =  openxava.decorateId(application, module, elementName);	
-	var element = form.elements[elementDecoratedName];
-	
+	var elementDecoratedName =  openxava.decorateId(application, module, elementName);
+	if (!openxava.setFocusOnElement(form, elementDecoratedName)) {
+		openxava.setFocusOnElement(form, elementDecoratedName + "__CONTROL__");
+	}
+}
+
+openxava.setFocusOnElement = function(form, name) { 
+	var element = form.elements[name];
 	if (element != null && typeof element.disabled != "undefined" && !element.disabled) {		
-		if (!$(element).is(':visible')) return; 		
+		if (!$(element).is(':visible')) return false; 		
 		if (element.type != "hidden") {			
 			element.focus();
+			return true; 
 		}
 		if (typeof element.select != "undefined") {			
 			element.select();
+			return true; 
 		}
-	}		
+	}	
+	return false;
 }
 
 openxava.clearCondition = function(application, module, prefix) { 
@@ -743,7 +775,7 @@ openxava.onSelectListFormat = function(event) {
 	i.parent().addClass(openxava.selectedListFormatClass);
 }
 
-openxava.clearLog = function(message) { 
+openxava.clearLog = function() { 
 	$('#xava_console').empty();
 }
 
