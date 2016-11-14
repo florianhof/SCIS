@@ -119,8 +119,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     /**
      * Trash deplored by the visitor
      */
-    @Column(name = "VISIT_TRASH", length = 5000)
-    @Stereotype("BIGTEXT_AREA")
+    @Column(name = "VISIT_TRASH", length = 100)
     private String visitTrash;
     
     /**
@@ -133,7 +132,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     /**
      * Sprays ascertained by the visitor
      */
-    @Column(name = "VISIT_SPRAYS")
+    @Column(name = "VISIT_SPRAYS", length = 100)
     private String visitSprays;
     
     /**
@@ -146,7 +145,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     /**
      * Damages ascertained by the visitor
      */
-    @Column(name = "VISIT_DAMAGES")
+    @Column(name = "VISIT_DAMAGES", length = 100)
     private String visitDamages;
     
     /**

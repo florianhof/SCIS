@@ -20,6 +20,8 @@ import ch.speleo.scis.model.common.*;
 import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 import ch.speleo.scis.persistence.utils.SimpleQueries;
 
+import org.openxava.calculators.*;
+
 /**
  * Class representing a surveillance sheet using Hibernate annotation
  * 
@@ -37,7 +39,6 @@ import ch.speleo.scis.persistence.utils.SimpleQueries;
 		+ "legalSituation,"
 		+ "initials,"
 		+ "evaluationDate,"
-		+ "geotopeInventory,"
 		+ "importance,"
 		+ "protection,"
 		+ "protectionType,"
@@ -65,9 +66,8 @@ import ch.speleo.scis.persistence.utils.SimpleQueries;
 			+ "legalSituation;"
 			+ "initials;"
 			+ "evaluationDate;"
-			+ "geotopeInventory;"
 			+ "importance;"
-			+ "protection;"
+			+ "protection,"
 			+ "protectionType;"
 			+ "importance [estheticImportanceRating, estheticImportance;"
 			+ "historicalImportanceRating, historicalImportance;"
@@ -80,8 +80,8 @@ import ch.speleo.scis.persistence.utils.SimpleQueries;
 			+ "hydroImportanceRating, hydroImportance;"
 			+ "hydrogeoImportanceRating, hydrogeoImportance;"
 			+ "geomorphologicalImportanceRating, geomorphologicalImportance];"
-			+ "visitors [accessibility, riskImportanceRating, riskImportance;"
-			+ "visitorFrequency, visitorType]")
+			+ "visitors [visitorFrequency, visitorType;"
+			+ "accessibility, riskImportanceRating, riskImportance]")
 })
 public class Surveillance
 extends GenericIdentity implements Serializable {
@@ -98,13 +98,13 @@ extends GenericIdentity implements Serializable {
      * Creation date of the sheet
      */
     @Required
-    @Column(name = "DATE_CREATED", updatable = false, nullable = false)
+    @DefaultValueCalculator(CurrentDateCalculator.class)
     private Date dateCreated;
     
     /**
      * Description of heritage
      */
-    @Column(name = "DESCRIPTION", nullable = true, updatable = true, length=10000)
+    @Column(name = "DESCRIPTION", nullable = true, updatable = true, length=1000)
 	@DisplaySize(value=30, forViews="Short")
     private String description;
     
@@ -131,12 +131,6 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "EVALUATION_DATE", nullable = true)
     private Date evaluationDate;
-    
-    /**
-     * Is it part of the inventoried geotope
-     */
-    @Column(name = "GEOTOPE_INVENTORY", nullable = false)
-    private Boolean geotopeInventory;
     
     /**
      * Choose one for importance : national, regional, local
@@ -405,14 +399,6 @@ extends GenericIdentity implements Serializable {
 		this.evaluationDate = evaluationDate;
 	}
 
-	public Boolean getGeotopeInventory() {
-		return geotopeInventory;
-	}
-
-	public void setGeotopeInventory(Boolean geotopeInventory) {
-		this.geotopeInventory = geotopeInventory;
-	}
-
 	public ImportanceEnum getImportance() {
 		return importance;
 	}
@@ -668,8 +654,6 @@ extends GenericIdentity implements Serializable {
 		builder.append(initials);
 		builder.append(", evaluationDate=");
 		builder.append(evaluationDate);
-		builder.append(", geotopeInventory=");
-		builder.append(geotopeInventory);
 		builder.append(", importance=");
 		builder.append(importance);
 		builder.append(", protection=");
