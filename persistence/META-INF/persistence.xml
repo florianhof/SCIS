@@ -10,7 +10,7 @@
     	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     	<non-jta-data-source>java://comp/env/jdbc/SCISDS</non-jta-data-source>
         <properties>
-            <!--property name="hibernate.hbm2ddl.auto" value="update" /--><!-- only for testing or developing -->
+            <!--property name="hibernate.hbm2ddl.auto" value="create" /--><!-- only for testing or developing -->
 
             <!-- database communication -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

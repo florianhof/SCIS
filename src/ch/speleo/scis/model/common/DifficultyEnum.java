@@ -10,22 +10,21 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
  * @author Julien
  * @version 1.0
  */
-public enum IntensityEnum
+public enum DifficultyEnum
 implements Codeable {
 
-	NONE("0"), 
-	VERY_WEAK("1"),
-	WEAK("2"),
-	MODERATE("3"), 
-	HIGH("4"),
-	VERY_HIGH("5"),
-	OVERWHELMING("6");
+	VERY_EASY("0"), 
+	EASY("1"),
+	MODERATE("2"),
+	DIFFICULT("3"), 
+	VERY_DIFFICULT("4"),
+	ACROBATIC("5");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.common.DifficultyEnum";
 
 	private final String code;
 	
-	private IntensityEnum(String code) {
+	private DifficultyEnum(String code) {
 		this.code = code;
 	}
 	
@@ -33,15 +32,15 @@ implements Codeable {
 		return this.code;
 	}
 	
-	public static IntensityEnum fromCode(String code) {
+	public static DifficultyEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
 	}
 	
 	
 	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum.CodedType";
+		public static final String CLASSNAME = "ch.speleo.scis.model.common.DifficultyEnum.CodedType";
 		public Class<? extends Codeable> returnedClass() {
-			return IntensityEnum.class;
+			return DifficultyEnum.class;
 		}
 	}
 	

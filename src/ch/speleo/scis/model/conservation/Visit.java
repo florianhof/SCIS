@@ -47,15 +47,16 @@ import ch.speleo.scis.model.karst.*;
 			+ "visitObject,"
 			+ "visitName,"
 			+ "visitSurname"),
-	@View(members = "visitObject,"
-			+ "definition [visitDate; visitName, visitSurname];"
-			+ "visitWeather, visitState, visitDescription;"
-			+ "definition [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages]"
+	@View(members = "visitObject;"
+			+ "description [visitDate, visitName, visitSurname;"
+			+ "visitDescription];"
+			+ "depredations [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages]"
 			+ "visitDescription;"
 			+ "visitPhotos;"
 			+ "visitMeasuresBool;"
 			+ "visitMeasures;"
-			+ "visitRemarks;")
+			+ "visitRemarks;"
+			+ "visitWeather")
 })
 public class Visit
 extends GenericIdentityWithDeleted implements Serializable, Identifiable {

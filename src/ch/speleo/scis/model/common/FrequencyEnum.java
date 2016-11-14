@@ -10,22 +10,20 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
  * @author Julien
  * @version 1.0
  */
-public enum IntensityEnum
+public enum FrequencyEnum
 implements Codeable {
 
-	NONE("0"), 
-	VERY_WEAK("1"),
-	WEAK("2"),
-	MODERATE("3"), 
-	HIGH("4"),
-	VERY_HIGH("5"),
-	OVERWHELMING("6");
+	EXCEPTIONAL("0"), 
+	VERY_RARE("1"),
+	RARE("2"),
+	FREQUENT("3"), 
+	VERY_FREQUENT("4");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.common.FrequencyEnum";
 
 	private final String code;
 	
-	private IntensityEnum(String code) {
+	private FrequencyEnum(String code) {
 		this.code = code;
 	}
 	
@@ -33,15 +31,15 @@ implements Codeable {
 		return this.code;
 	}
 	
-	public static IntensityEnum fromCode(String code) {
+	public static FrequencyEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
 	}
 	
 	
 	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum.CodedType";
+		public static final String CLASSNAME = "ch.speleo.scis.model.common.FrequencyEnum.CodedType";
 		public Class<? extends Codeable> returnedClass() {
-			return IntensityEnum.class;
+			return FrequencyEnum.class;
 		}
 	}
 	
