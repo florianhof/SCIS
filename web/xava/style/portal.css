@@ -834,3 +834,76 @@ input[type="radio"] {
 .ox-icon-in-list i {
 	color: black;
 }
+
+a.cke_button_off {
+	opacity: .4;
+}
+
+.cke_toolgroup {
+	border: 0px !important;
+	background: transparent !important;
+}
+
+a.cke_button_off, a.cke_button_disabled, .cke_button_on {
+	padding: 4px 4px 4px 4px; !important;
+}
+
+a.cke_button_off, a.cke_button_disabled {
+	border: 1px solid transparent !important;
+}
+
+
+a.cke_button_off:hover, a.cke_button_off:focus, a.cke_button_off:active {
+	opacity: .6;
+	border: 1px solid #A7CEDF !important;	
+	background: #DFF4FF !important;
+	color: #346799 !important; 
+	box-shadow: none !important;  
+
+}
+
+a.cke_button_disabled:hover, a.cke_button_disabled:focus, a.cke_button_disabled:active {
+	background: transparent !important;
+	background-image: none !important;
+	box-shadow: none !important; 
+}
+
+.list-title { 
+	padding: 0px;
+	margin-bottom: 10px;
+	font-size: 15px;
+}
+
+.list-title i { 
+	font-size: 17px;
+	margin-left: 5px;
+	margin-right: 0px;
+	padding: 1px 0px 1px 0px;
+	vertical-align:top;
+}
+
+.list-title select {
+	font-size: 13px;
+	font-weight: bold;
+	margin-top: -13px;
+	padding-bottom: 0px;
+	border: 1px solid transparent;
+	box-shadow: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	cursor: pointer;
+	background: transparent;
+}
+
+.list-title select::-ms-expand{
+    display: none;
+}
+
+#list-title {
+	font-weight: bold;
+	position: relative;
+	top: -22px;
+	display: flex;
+    justify-content: center;
+    height: 0px;
+}

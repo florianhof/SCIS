@@ -48,7 +48,7 @@ import ch.speleo.scis.model.karst.*;
 			+ "visitName,"
 			+ "visitSurname"),
 	@View(members = "visitObject;"
-			+ "description [visitDate, visitName, visitSurname;"
+			+ "visitAddress [visitDate, visitName, visitSurname;"
 			+ "visitDescription];"
 			+ "depredations [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages]"
 			+ "visitDescription;"

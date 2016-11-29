@@ -1,8 +1,9 @@
-package ch.speleo.scis.model.common;
+package ch.speleo.scis.model.conservation;
 
 import org.hibernate.usertype.*;
 
 import ch.speleo.scis.model.common.Codeable;
+import ch.speleo.scis.model.common.Codeable.*;
 import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
@@ -19,7 +20,7 @@ implements Codeable {
 	FREQUENT("3"), 
 	VERY_FREQUENT("4");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.FrequencyEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.FrequencyEnum";
 
 	private final String code;
 	
@@ -37,7 +38,7 @@ implements Codeable {
 	
 	
 	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.FrequencyEnum.CodedType";
+		public static final String CLASSNAME = "ch.speleo.scis.model.conservation.FrequencyEnum.CodedType";
 		public Class<? extends Codeable> returnedClass() {
 			return FrequencyEnum.class;
 		}

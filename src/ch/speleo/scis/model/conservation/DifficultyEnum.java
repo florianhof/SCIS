@@ -1,8 +1,9 @@
-package ch.speleo.scis.model.common;
+package ch.speleo.scis.model.conservation;
 
 import org.hibernate.usertype.*;
 
 import ch.speleo.scis.model.common.Codeable;
+import ch.speleo.scis.model.common.Codeable.*;
 import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
@@ -20,7 +21,7 @@ implements Codeable {
 	VERY_DIFFICULT("4"),
 	ACROBATIC("5");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.DifficultyEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.DifficultyEnum";
 
 	private final String code;
 	
@@ -38,7 +39,7 @@ implements Codeable {
 	
 	
 	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.DifficultyEnum.CodedType";
+		public static final String CLASSNAME = "ch.speleo.scis.model.conservation.DifficultyEnum.CodedType";
 		public Class<? extends Codeable> returnedClass() {
 			return DifficultyEnum.class;
 		}

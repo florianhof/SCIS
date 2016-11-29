@@ -135,7 +135,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Choose one for importance : national, regional, local
      */
-    @Column(name = "IMPORTANCE", nullable = true, length = 25)
+    @Column(name = "IMPORTANCE", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=ImportanceEnum.CLASSNAME)})
     private ImportanceEnum importance;
@@ -155,7 +155,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of esthetic importance
      */
-    @Column(name = "ESTHETIC_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "ESTHETIC_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum estheticImportanceRating;
@@ -169,7 +169,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of cultural importance
      */
-    @Column(name = "CULTURAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "CULTURAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum culturalImportanceRating;
@@ -183,7 +183,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of historical importance
      */
-    @Column(name = "HISTORICAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "HISTORICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum historicalImportanceRating;
@@ -197,7 +197,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of biospeleological importance
      */
-    @Column(name = "BIOSPELEOLOGICAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "BIOSPELEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum biospeleoImportanceRating;
@@ -211,7 +211,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of volume
      */
-    @Column(name = "VOLUME_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "VOLUME_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum volumeImportanceRating;
@@ -225,7 +225,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of paleoontological importance
      */
-    @Column(name = "PALEONTOLOGIC_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "PALEONTOLOGIC_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum paleontologicalImportanceRating;
@@ -239,7 +239,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of archaeological importance
      */
-    @Column(name = "ARCHAEOLOGICAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "ARCHAEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum archaeologicalImportanceRating;
@@ -253,7 +253,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of geological importance
      */
-    @Column(name = "GEOLOGICAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "GEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum geologicalImportanceRating;
@@ -267,7 +267,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of hydrological importance
      */
-    @Column(name = "HYDRO_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "HYDRO_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum hydroImportanceRating;
@@ -281,7 +281,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of hydrogeological importance
      */
-    @Column(name = "HYDROGEO_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "HYDROGEO_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum hydrogeoImportanceRating;
@@ -295,7 +295,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of geomorphological importance
      */
-    @Column(name = "GEOMORPHOLOGICAL_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "GEOMORPHOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum geomorphologicalImportanceRating;
@@ -309,7 +309,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of risk importance
      */
-    @Column(name = "RISK_IMPORTANCE_RATING", nullable = true, length=25)
+    @Column(name = "RISK_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
     private IntensityEnum riskImportanceRating;
@@ -323,7 +323,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of accessibility
      */
-    @Column(name = "ACCESSIBILITY", nullable = true, length=25)
+    @Column(name = "ACCESSIBILITY", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=DifficultyEnum.CLASSNAME)})
     private DifficultyEnum accessibility;
@@ -331,7 +331,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of visitor frequency
      */
-    @Column(name = "VISITOR_FREQUENCY", nullable = true, length=25)
+    @Column(name = "VISITOR_FREQUENCY", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
     parameters={ @Parameter(name=TYPE, value=FrequencyEnum.CLASSNAME)})
     private FrequencyEnum visitorFrequency;

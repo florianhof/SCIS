@@ -198,6 +198,7 @@ else {
 
 <% if (!frame) { %>
 	<%@ include file="referenceActions.jsp"%>
+	<%@ include file="referenceActionsExt.jsp"%>
 <% } %>
 
 <% if (!composite && !notCompositeEditorClosed) { %> 

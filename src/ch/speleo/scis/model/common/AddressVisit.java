@@ -81,5 +81,20 @@ public class AddressVisit {
 	public void setCanton(String canton) {
 		this.canton = canton;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("street=");
+		builder.append(street);
+		builder.append(", postalCode=");
+		builder.append(postalCode);
+		builder.append(" city=");
+		builder.append(city);
+		builder.append(" (canton=)");
+		builder.append(canton);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }
