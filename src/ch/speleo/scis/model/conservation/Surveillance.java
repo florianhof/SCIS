@@ -35,7 +35,6 @@ import org.openxava.calculators.*;
 @Audited
 @Tab(properties = "dateCreated,"
 		+ "description,"
-		+ "visit,"
 		+ "legalSituation,"
 		+ "initials,"
 		+ "evaluationDate,"
@@ -59,10 +58,10 @@ import org.openxava.calculators.*;
 		,
 	rowStyles = {@RowStyle(style="deletedData", property="deleted", value="true")})
 @Views({
-	@View(name = "Short", members = "id, dateCreated, initials"), 
+	@View(name = "Short", members = "dateCreated, initials"), 
 	@View(members = "dateCreated;"
 			+ "description;"
-			+ "visit;"
+			+ "address;"
 			+ "legalSituation;"
 			+ "initials;"
 			+ "evaluationDate;"
@@ -91,13 +90,10 @@ extends GenericIdentity implements Serializable {
     private static final long serialVersionUID = 5654131353056129922L;
     
     /**
-     * TODO : fetch id from karst object instead
-     */
-    
-    /**
      * Creation date of the sheet
      */
     @Required
+    @Temporal(TemporalType.DATE)
     @DefaultValueCalculator(CurrentDateCalculator.class)
     private Date dateCreated;
     
@@ -112,7 +108,7 @@ extends GenericIdentity implements Serializable {
      * Contact address for visits
      */
     @Embedded
-    private AddressVisit visit;
+    private PostalAddress address;
     
     /**
      * Legal standing
@@ -129,6 +125,7 @@ extends GenericIdentity implements Serializable {
     /**
      * Date of evaluation (what is an evaluation ?)
      */
+    @Temporal(TemporalType.DATE)
     @Column(name = "EVALUATION_DATE", nullable = true)
     private Date evaluationDate;
     
@@ -155,10 +152,10 @@ extends GenericIdentity implements Serializable {
     /**
      * Rating of esthetic importance
      */
-    @Column(name = "ESTHETIC_IMPORTANCE_RATING", nullable = true, length = 1)
+    @Column(name = "ESTHETIC_IMPORTANCE_RATING", nullable = true, length = 25)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum estheticImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum estheticImportanceRating;
     
     /**
      * Description of noticeable stuff from an esthetic point of view
@@ -171,8 +168,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "CULTURAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum culturalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum culturalImportanceRating;
     
     /**
      * Description of noticeable stuff from a cultural point of view
@@ -185,8 +182,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "HISTORICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum historicalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum historicalImportanceRating;
     
     /**
      * Description of noticeable stuff from an historical point of view
@@ -199,8 +196,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "BIOSPELEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum biospeleoImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum biospeleoImportanceRating;
     
     /**
      * Description of noticeable stuff from a biospeleological point of view
@@ -213,8 +210,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "VOLUME_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum volumeImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum volumeImportanceRating;
     
     /**
      * Description of stuff of notice from a volumic / size point of view
@@ -227,8 +224,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "PALEONTOLOGIC_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum paleontologicalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum paleontologicalImportanceRating;
     
     /**
      * Description of stuff of notice from a paleontological point of view
@@ -241,8 +238,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "ARCHAEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum archaeologicalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum archaeologicalImportanceRating;
     
     /**
      * Description of stuff of notice from an archaeological point of view
@@ -255,8 +252,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "GEOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum geologicalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum geologicalImportanceRating;
     
     /**
      * Description of stuff of notice from a geological point of view
@@ -269,8 +266,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "HYDRO_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum hydroImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum hydroImportanceRating;
     
     /**
      * Description of stuff of notice from an hydrological point of view
@@ -283,8 +280,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "HYDROGEO_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum hydrogeoImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum hydrogeoImportanceRating;
     
     /**
      * Description of stuff of notice from an hydrogeological point of view
@@ -297,8 +294,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "GEOMORPHOLOGICAL_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum geomorphologicalImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum geomorphologicalImportanceRating;
     
     /**
      * Description of stuff of notice from a geomorphological point of view
@@ -311,8 +308,8 @@ extends GenericIdentity implements Serializable {
      */
     @Column(name = "RISK_IMPORTANCE_RATING", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME,
-    parameters={ @Parameter(name=TYPE, value=IntensityEnum.CLASSNAME)})
-    private IntensityEnum riskImportanceRating;
+    parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
+    private RatingEnum riskImportanceRating;
     
     /**
      * Description of the stuff of notice from a risk point of view
@@ -350,6 +347,37 @@ extends GenericIdentity implements Serializable {
     /**
      * Getters and setters (automatically generated by Eclipse)
      */
+    public String getStreet() {
+    	return this.address.getStreet();
+    }
+    
+    public void setStreet(String street) {
+    	this.address.setStreet(street);
+    }
+    
+    public int getPostalCode() {
+    	return this.address.getPostalCode();
+    }
+    
+    public void setPostalCode(int postalCode) {
+    	this.address.setPostalCode(postalCode);
+    }
+    
+    public String getCity() {
+    	return this.address.getCity();
+    }
+    
+    public void setCity(String city) {
+    	this.address.setCity(city);
+    }
+    
+    public String getCanton() {
+    	return this.address.getCanton();
+    }
+    
+    public void setCanton(String canton) {
+    	this.address.setCanton(canton);
+    }
     
 	public Date getDateCreated() {
 		return dateCreated;
@@ -367,12 +395,12 @@ extends GenericIdentity implements Serializable {
 		this.description = description;
 	}
 
-	public AddressVisit getVisit() {
-		return visit;
+	public PostalAddress getAddress() {
+		return address;
 	}
 
-	public void setVisit(AddressVisit visit) {
-		this.visit = visit;
+	public void setAddress(PostalAddress address) {
+		this.address = address;
 	}
 
 	public String getLegalSituation() {
@@ -423,11 +451,11 @@ extends GenericIdentity implements Serializable {
 		this.protectionType = protectionType;
 	}
 
-	public IntensityEnum getEstheticImportanceRating() {
+	public RatingEnum getEstheticImportanceRating() {
 		return estheticImportanceRating;
 	}
 
-	public void setEstheticImportanceRating(IntensityEnum estheticImportanceRating) {
+	public void setEstheticImportanceRating(RatingEnum estheticImportanceRating) {
 		this.estheticImportanceRating = estheticImportanceRating;
 	}
 
@@ -439,11 +467,11 @@ extends GenericIdentity implements Serializable {
 		this.estheticImportance = estheticImportance;
 	}
 
-	public IntensityEnum getCulturalImportanceRating() {
+	public RatingEnum getCulturalImportanceRating() {
 		return culturalImportanceRating;
 	}
 
-	public void setCulturalImportanceRating(IntensityEnum culturalImportanceRating) {
+	public void setCulturalImportanceRating(RatingEnum culturalImportanceRating) {
 		this.culturalImportanceRating = culturalImportanceRating;
 	}
 
@@ -455,11 +483,11 @@ extends GenericIdentity implements Serializable {
 		this.culturalImportance = culturalImportance;
 	}
 
-	public IntensityEnum getHistoricalImportanceRating() {
+	public RatingEnum getHistoricalImportanceRating() {
 		return historicalImportanceRating;
 	}
 
-	public void setHistoricalImportanceRating(IntensityEnum historicalImportanceRating) {
+	public void setHistoricalImportanceRating(RatingEnum historicalImportanceRating) {
 		this.historicalImportanceRating = historicalImportanceRating;
 	}
 
@@ -471,11 +499,11 @@ extends GenericIdentity implements Serializable {
 		this.historicalImportance = historicalImportance;
 	}
 
-	public IntensityEnum getBiospeleoImportanceRating() {
+	public RatingEnum getBiospeleoImportanceRating() {
 		return biospeleoImportanceRating;
 	}
 
-	public void setBiospeleoImportanceRating(IntensityEnum biospeleoImportanceRating) {
+	public void setBiospeleoImportanceRating(RatingEnum biospeleoImportanceRating) {
 		this.biospeleoImportanceRating = biospeleoImportanceRating;
 	}
 
@@ -487,11 +515,11 @@ extends GenericIdentity implements Serializable {
 		this.biospeleoImportance = biospeleoImportance;
 	}
 
-	public IntensityEnum getVolumeImportanceRating() {
+	public RatingEnum getVolumeImportanceRating() {
 		return volumeImportanceRating;
 	}
 
-	public void setVolumeImportanceRating(IntensityEnum volumeImportanceRating) {
+	public void setVolumeImportanceRating(RatingEnum volumeImportanceRating) {
 		this.volumeImportanceRating = volumeImportanceRating;
 	}
 
@@ -503,11 +531,11 @@ extends GenericIdentity implements Serializable {
 		this.volumeImportance = volumeImportance;
 	}
 
-	public IntensityEnum getPaleontologicalImportanceRating() {
+	public RatingEnum getPaleontologicalImportanceRating() {
 		return paleontologicalImportanceRating;
 	}
 
-	public void setPaleontologicalImportanceRating(IntensityEnum paleontologicalImportanceRating) {
+	public void setPaleontologicalImportanceRating(RatingEnum paleontologicalImportanceRating) {
 		this.paleontologicalImportanceRating = paleontologicalImportanceRating;
 	}
 
@@ -519,11 +547,11 @@ extends GenericIdentity implements Serializable {
 		this.paleontologicalImportance = paleontologicalImportance;
 	}
 
-	public IntensityEnum getArchaeologicalImportanceRating() {
+	public RatingEnum getArchaeologicalImportanceRating() {
 		return archaeologicalImportanceRating;
 	}
 
-	public void setArchaeologicalImportanceRating(IntensityEnum archaeologicalImportanceRating) {
+	public void setArchaeologicalImportanceRating(RatingEnum archaeologicalImportanceRating) {
 		this.archaeologicalImportanceRating = archaeologicalImportanceRating;
 	}
 
@@ -535,11 +563,11 @@ extends GenericIdentity implements Serializable {
 		this.archaeologicalImportance = archaeologicalImportance;
 	}
 
-	public IntensityEnum getGeologicalImportanceRating() {
+	public RatingEnum getGeologicalImportanceRating() {
 		return geologicalImportanceRating;
 	}
 
-	public void setGeologicalImportanceRating(IntensityEnum geologicalImportanceRating) {
+	public void setGeologicalImportanceRating(RatingEnum geologicalImportanceRating) {
 		this.geologicalImportanceRating = geologicalImportanceRating;
 	}
 
@@ -551,11 +579,11 @@ extends GenericIdentity implements Serializable {
 		this.geologicalImportance = geologicalImportance;
 	}
 
-	public IntensityEnum getHydroImportanceRating() {
+	public RatingEnum getHydroImportanceRating() {
 		return hydroImportanceRating;
 	}
 
-	public void setHydroImportanceRating(IntensityEnum hydroImportanceRating) {
+	public void setHydroImportanceRating(RatingEnum hydroImportanceRating) {
 		this.hydroImportanceRating = hydroImportanceRating;
 	}
 
@@ -567,11 +595,11 @@ extends GenericIdentity implements Serializable {
 		this.hydroImportance = hydroImportance;
 	}
 
-	public IntensityEnum getHydrogeoImportanceRating() {
+	public RatingEnum getHydrogeoImportanceRating() {
 		return hydrogeoImportanceRating;
 	}
 
-	public void setHydrogeoImportanceRating(IntensityEnum hydrogeoImportanceRating) {
+	public void setHydrogeoImportanceRating(RatingEnum hydrogeoImportanceRating) {
 		this.hydrogeoImportanceRating = hydrogeoImportanceRating;
 	}
 
@@ -583,11 +611,11 @@ extends GenericIdentity implements Serializable {
 		this.hydrogeoImportance = hydrogeoImportance;
 	}
 
-	public IntensityEnum getGeomorphologicalImportanceRating() {
+	public RatingEnum getGeomorphologicalImportanceRating() {
 		return geomorphologicalImportanceRating;
 	}
 
-	public void setGeomorphologicalImportanceRating(IntensityEnum geomorphologicalImportanceRating) {
+	public void setGeomorphologicalImportanceRating(RatingEnum geomorphologicalImportanceRating) {
 		this.geomorphologicalImportanceRating = geomorphologicalImportanceRating;
 	}
 
@@ -599,11 +627,11 @@ extends GenericIdentity implements Serializable {
 		this.geomorphologicalImportance = geomorphologicalImportance;
 	}
 
-	public IntensityEnum getRiskImportanceRating() {
+	public RatingEnum getRiskImportanceRating() {
 		return riskImportanceRating;
 	}
 
-	public void setRiskImportanceRating(IntensityEnum riskImportanceRating) {
+	public void setRiskImportanceRating(RatingEnum riskImportanceRating) {
 		this.riskImportanceRating = riskImportanceRating;
 	}
 
@@ -646,8 +674,14 @@ extends GenericIdentity implements Serializable {
 		builder.append(dateCreated);
 		builder.append(", description=");
 		builder.append(description);
-		builder.append(", visit=");
-		builder.append(visit);
+		builder.append(", street=");
+		builder.append(getStreet());
+		builder.append(", postalCode=");
+		builder.append(getPostalCode());
+		builder.append(", city=");
+		builder.append(getCity());
+		builder.append(", canton=");
+		builder.append(getCanton());
 		builder.append(", legalSituation=");
 		builder.append(legalSituation);
 		builder.append(", initials=");

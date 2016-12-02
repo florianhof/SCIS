@@ -66,13 +66,10 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     private static final long serialVersionUID = 5654131353056129922L;
     
     /**
-     * TODO : fetch id from karst object instead
-     */
-    
-    /**
      * Date of visit
      */
     @Required
+    @Temporal(TemporalType.DATE)
     @Column(name = "VISIT_DATE")
     private Date visitDate;
     

@@ -12,7 +12,7 @@ import javax.persistence.*;
  */
 
 @Embeddable // Used instead of @entity for embeddable classes
-public class AddressVisit {
+public class PostalAddress {
 	
 	@Column(
 			name="STREET",
@@ -41,9 +41,9 @@ public class AddressVisit {
     /**
      * Empty constructor.
      */
-    public AddressVisit() { }
+    public PostalAddress() { }
 	
-	public AddressVisit(String street,int postalCode,String city,String canton){
+	public PostalAddress(String street,int postalCode,String city,String canton){
 		this.street=street;
 		this.postalCode=postalCode;
 		this.city=city;

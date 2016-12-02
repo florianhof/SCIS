@@ -13,11 +13,11 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 public enum ImportanceEnum 
 implements Codeable {
 
-	LOCAL("0"), 
-	REGIONAL("1"),
-	CANTONAL("2"),
-	NATIONAL("3"), 
-	INTERNATIONAL("4");
+	LOCAL("L"), 
+	REGIONAL("R"),
+	CANTONAL("C"),
+	NATIONAL("N"), 
+	INTERNATIONAL("I");
 	
 	public static final String CLASSNAME = "ch.speleo.scis.model.common.ImportanceEnum";
 

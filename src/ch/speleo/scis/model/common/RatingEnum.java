@@ -10,7 +10,7 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
  * @author Julien
  * @version 1.0
  */
-public enum IntensityEnum
+public enum RatingEnum
 implements Codeable {
 
 	NONE("0"), 
@@ -21,11 +21,11 @@ implements Codeable {
 	VERY_HIGH("5"),
 	OVERWHELMING("6");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.common.RatingEnum";
 
 	private final String code;
 	
-	private IntensityEnum(String code) {
+	private RatingEnum(String code) {
 		this.code = code;
 	}
 	
@@ -33,15 +33,15 @@ implements Codeable {
 		return this.code;
 	}
 	
-	public static IntensityEnum fromCode(String code) {
+	public static RatingEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
 	}
 	
 	
 	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.IntensityEnum.CodedType";
+		public static final String CLASSNAME = "ch.speleo.scis.model.common.RatingEnum.CodedType";
 		public Class<? extends Codeable> returnedClass() {
-			return IntensityEnum.class;
+			return RatingEnum.class;
 		}
 	}
 	
