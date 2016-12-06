@@ -19,7 +19,7 @@
             <!--property name="org.hibernate.envers.audit_strategy" value="org.hibernate.envers.strategy.ValidityAuditStrategy" /-->
             <property name="org.hibernate.envers.audit_table_suffix" value="_HIST" />
             <property name="org.hibernate.envers.store_data_at_delete" value="true" />
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <!--property name="hibernate.hbm2ddl.auto" value="create-drop" /-->
         </properties>
     </persistence-unit>    
         
@@ -27,7 +27,7 @@
     <persistence-unit name="junit">
     	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop" /><!-- only for testing or developing -->
+            <!--property name="hibernate.hbm2ddl.auto" value="create-drop" /--><!-- only for testing or developing -->
 
             <!-- database communication -->
             <!-- PostgreSQL -->
