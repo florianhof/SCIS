@@ -4,7 +4,7 @@ Installation de l'environement de développement
 -------------------
 1. Installer Eclipse et Eclipe JEE
 2. Installer PostgreSQL
-2. Télécharger OpenXava ; la version 5.4 est recommandée mais la version 5.5.1 a l'air de fonctionner. Extraire OpenXava dans un dossier.
+2. Télécharger OpenXava ; la version 5.4 (https://sourceforge.net/projects/openxava/files/openxava/5.4/) est recommandée mais la version 5.5.1 a l'air de fonctionner. Extraire OpenXava dans un dossier.
 3. Ouvrir Eclipse sur le workspace OpenXava.
 4. Afficher la perspective Git, cloner le repository https://github.com/florianhof/SCIS.git en spécifiant , au 3ème écran, la destination comme le workspace OpenXava et la branche initiale (pour le moment nommée "develop").
 5. Créer une nouvelle branche, checkout cette branche
