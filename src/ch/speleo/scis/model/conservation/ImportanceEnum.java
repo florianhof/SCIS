@@ -1,9 +1,6 @@
-package ch.speleo.scis.model.common;
-
-import org.hibernate.usertype.UserType;
+package ch.speleo.scis.model.conservation;
 
 import ch.speleo.scis.model.common.Codeable;
-import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
  * Categories importance of heritage 
@@ -19,7 +16,7 @@ implements Codeable {
 	NATIONAL("N"), 
 	INTERNATIONAL("I");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.ImportanceEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.ImportanceEnum";
 
 	private final String code;
 	
@@ -33,14 +30,6 @@ implements Codeable {
 	
 	public static ImportanceEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
-	}
-	
-	
-	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.ImportanceEnum.CodedType";
-		public Class<? extends Codeable> returnedClass() {
-			return ImportanceEnum.class;
-		}
 	}
 	
 }

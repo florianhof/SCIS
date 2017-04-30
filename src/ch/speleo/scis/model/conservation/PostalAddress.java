@@ -1,6 +1,6 @@
 
 
-package ch.speleo.scis.model.common;
+package ch.speleo.scis.model.conservation;
 
 import javax.persistence.*;
 

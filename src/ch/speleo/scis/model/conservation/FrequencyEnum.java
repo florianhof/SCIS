@@ -1,10 +1,6 @@
 package ch.speleo.scis.model.conservation;
 
-import org.hibernate.usertype.*;
-
 import ch.speleo.scis.model.common.Codeable;
-import ch.speleo.scis.model.common.Codeable.*;
-import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
  * For rating
@@ -34,14 +30,6 @@ implements Codeable {
 	
 	public static FrequencyEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
-	}
-	
-	
-	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.conservation.FrequencyEnum.CodedType";
-		public Class<? extends Codeable> returnedClass() {
-			return FrequencyEnum.class;
-		}
 	}
 	
 }

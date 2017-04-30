@@ -22,11 +22,10 @@ import ch.speleo.scis.model.karst.*;
 	uniqueConstraints =
 		@UniqueConstraint(columnNames = "ID"))
 @Audited
-@Tab(properties = "visitObject,"
+@Tab(properties = "visitObject.name,"
 		+ "visitDate,"
 		+ "visitName,"
 		+ "visitSurname,"
-		+ "visitWeather,"
 		+ "visitState,"
 		+ "visitDescription,"
 		+ "visitTrashBool,"
@@ -50,13 +49,11 @@ import ch.speleo.scis.model.karst.*;
 	@View(members = "visitObject;"
 			+ "visitAddress [visitDate, visitName, visitSurname;"
 			+ "visitDescription];"
-			+ "depredations [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages]"
-			+ "visitDescription;"
+			+ "depredations [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages];"
 			+ "visitPhotos;"
 			+ "visitMeasuresBool;"
 			+ "visitMeasures;"
-			+ "visitRemarks;"
-			+ "visitWeather")
+			+ "visitRemarks")
 })
 public class Visit
 extends GenericIdentityWithDeleted implements Serializable, Identifiable {
@@ -97,6 +94,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
      * Weather at the time of the visit (or just before in case it's an underground visit)
      */
     @Column(name = "VISIT_WEATHER", length=25)
+    @Deprecated // not needed, to be removed
     private String visitWeather;
     
     /**

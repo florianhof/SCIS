@@ -1,9 +1,6 @@
-package ch.speleo.scis.model.common;
-
-import org.hibernate.usertype.*;
+package ch.speleo.scis.model.conservation;
 
 import ch.speleo.scis.model.common.Codeable;
-import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
  * For rating
@@ -21,7 +18,7 @@ implements Codeable {
 	VERY_HIGH("5"),
 	OVERWHELMING("6");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.common.RatingEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.RatingEnum";
 
 	private final String code;
 	
@@ -35,14 +32,6 @@ implements Codeable {
 	
 	public static RatingEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
-	}
-	
-	
-	public static class CodedType extends CodedEnumType implements UserType {
-		public static final String CLASSNAME = "ch.speleo.scis.model.common.RatingEnum.CodedType";
-		public Class<? extends Codeable> returnedClass() {
-			return RatingEnum.class;
-		}
 	}
 	
 }
