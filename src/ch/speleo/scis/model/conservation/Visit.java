@@ -74,7 +74,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     private Date visitDate;
     
     /**
-     * Date of visit
+     * Object of visit
      */
     @ManyToOne
     @JoinColumn(name="ID_VISIT_OBJECT", referencedColumnName="ID")

@@ -37,25 +37,27 @@ if (first && !view.isAlignedByColumns()) label = org.openxava.util.Strings.chang
 <% if (!hasFrame) {  %>
 
 <%=preLabel%>
-<% 
-if (labelFormat == MetaPropertyView.NORMAL_LABEL) {
-%>
+<% if (labelFormat == MetaPropertyView.NORMAL_LABEL) { %>
 <span id="<xava:id name='<%="label_" + view.getPropertyPrefix() + p.getName()%>'/>" class="<%=labelStyle%>">
 <%=label%>
 </span>
 <% } %>
 <%=postLabel%>
 <%=preIcons%>
+<% if (labelFormat != MetaPropertyView.SMALL_LABEL) { %>
 <%@ include file="editorIcons.jsp"%>
+<% } %>
 <%=postIcons%>
 <%=preEditor%>
-<% 
-if (labelFormat == MetaPropertyView.SMALL_LABEL) { 
+<% if (labelFormat == MetaPropertyView.SMALL_LABEL) { 	
 %>
-<span id="<xava:id name='<%="label_" + view.getPropertyPrefix() + p.getName()%>'/>" class="<%=style.getSmallLabel()%> <%=labelStyle%>"><%=label%></span><br/> 
-<% } %>
-<% } else { %>
+<table border='0' cellpadding='0', cellspacing='0'><tr><td align='bottom'>
+<span id="<xava:id name='<%="label_" + view.getPropertyPrefix() + p.getName()%>'/>" class="<%=style.getSmallLabel()%> <%=labelStyle%>"><%=label%></span>
 <%@ include file="editorIcons.jsp"%>
+</td></tr>
+<tr><td style='vertical-align: middle'>
+<% } %>
+
 <% } // if (!hasFrame) %>
 <span id="<xava:id name='<%="editor_" + view.getPropertyPrefix() + p.getName()%>'/>"> 
 <xava:editor property="<%=p.getName()%>" editable="<%=editable%>" throwPropertyChanged="<%=throwPropertyChanged%>"/>
@@ -71,11 +73,11 @@ if (labelFormat == MetaPropertyView.SMALL_LABEL) {
 <% } %>
 </span>
 
-<%@ include file="propertyActionsExt.jsp"%>
-
 <% if (!hasFrame) { %>
 <%=postEditor%>
 <% if (labelFormat == MetaPropertyView.SMALL_LABEL) { %>
+</td></tr>
+</table>
 <% } %>
 
 <% } // if (!hasFrame) %>

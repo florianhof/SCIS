@@ -3,9 +3,15 @@
 <%if (view.isEditable() || 
 		!(!view.isEditable() && !XavaPreferences.getInstance().isShowIconForViewReadOnly())
 	) { %>
-	<i class='<%=style.getRequiredIcon()%> <%=ref.isRequired()?"mdi mdi-marker-check":""%>'></i>
+	<% if (ref.isKey()) { %>
+	<img src="<%=request.getContextPath()%>/xava/images/key.gif"/>
+	<% } else if (ref.isRequired()) {  %>	
+	<img src="<%=request.getContextPath()%>/xava/images/required.gif"/>
+	<% } %> 
 <%} %>
 
-<span id="<xava:id name='<%="error_image_" + ref.getQualifiedName()%>'/>"> 
-	<i class='<%=style.getErrorIcon()%> mdi mdi-alert-circle' <%=errors.memberHas(ref)?"":"style='visibility:hidden;'"%>></i>
+<span id="<xava:id name='<%="error_image_" + ref.getQualifiedName()%>'/>">
+<% if ( errors.memberHas(ref)) {%>
+<img src="<%=request.getContextPath()%>/xava/images/error.gif"/>
+<% } %>
 </span>

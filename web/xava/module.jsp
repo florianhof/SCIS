@@ -287,7 +287,6 @@ if (manager.isResetFormPostNeeded()) {
 		openxava.currentRowClass = '<%=style.getCurrentRow()%>';
 		openxava.currentRowCellClass = '<%=style.getCurrentRowCell()%>';
 		openxava.selectedListFormatClass = '<%=style.getSelectedListFormat()%>'; 
-		openxava.customizeControlsClass = '<%=style.getCustomizeControls()%>'; 
 		openxava.listAdjustment = <%=style.getListAdjustment()%>;
 		openxava.collectionAdjustment = <%=style.getCollectionAdjustment()%>;
 		openxava.closeDialogOnEscape = <%=browser != null && browser.indexOf("Firefox") >= 0 ? "false":"true"%>;		  

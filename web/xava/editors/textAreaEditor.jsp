@@ -15,8 +15,7 @@ String script = request.getParameter("script");
 int rows = p.getSize() / 80 + 1;
 script = script + " onkeyup='return openxava.limitLength(event, " + p.getSize() + ")' ";
 boolean rich = Is.equalAsStringIgnoreCase("true", request.getParameter("rich"));
-String cssClass = request.getParameter("cssClass");
-if (cssClass == null) cssClass = style.getEditor();
+String cssClass = rich?"ox-ckeditor":style.getEditor(); 
 %>
 
 <textarea id="<%=propertyKey%>" name="<%=propertyKey%>" class="<%=cssClass%>"

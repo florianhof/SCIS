@@ -24,9 +24,9 @@ extends GenericIdentityWithRevision {
     /**
      * Flag indicating if the karst object is deleted or not.
      */
-    @Column(name = "DELETED", nullable = true)
+    @Column(name = "DELETED", nullable = false)
     @DefaultValueCalculator(FalseCalculator.class)
-    private Boolean deleted;
+    private Boolean deleted = Boolean.FALSE;
 
     /**
      * @return if the entity has been marked as deleted.

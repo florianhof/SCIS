@@ -18,6 +18,7 @@
 <jsp:useBean id="layoutPainterManager" class="org.openxava.web.layout.LayoutPainterManager" scope="session"/>
 
 <%!
+private final static String LAST_TABLE_NOT_CLOSED = "xava.layout.detail.lastTableNotClose";
 private boolean hasFrame(MetaMember m, View view) { 
 	if (m instanceof MetaProperty) {
 		return WebEditors.hasFrame((MetaProperty) m, view.getViewName());
@@ -26,14 +27,6 @@ private boolean hasFrame(MetaMember m, View view) {
   		return !view.displayReferenceWithNoFrameEditor((MetaReference) m);  		
   	}
   	return true;
-}
-
-private String openDiv(View view) {
-	return view.isFrame()?"<div class='ox-layout-detail'>":""; 
-}
-
-private String closeDiv(View view) {
-	return view.isFrame()?"</div>":""; 
 }
 %>
 
@@ -51,25 +44,63 @@ boolean onlySections = view.hasSections() && view.getMetaMembers().isEmpty();
 %>
 
 <%
-boolean renderedView = isSection ? layoutPainterManager.renderSection(view, pageContext)		
-	: layoutPainterManager.renderView(view, pageContext);
-
+boolean renderedView = isSection ? layoutPainterManager.renderSection(view, pageContext)
+	: layoutPainterManager.renderView(view, pageContext);	
 if (!renderedView) {
 	// Only performed if no layout painter is in effect.
 	if (!onlySections) {	// IF Not Only Sections
-%>	
-		<%=openDiv(view)%>	
+		if (view.isFrame()) {	// IF Is Frame 
+%>
+<table <%=style.getFrameWidth()%>>
+	<tr>
+<% 
+	}	// END IF Is Frame
+%>
 <%
 	Iterator it = view.getMetaMembers().iterator();
 	String sfirst = request.getParameter("first");
 	boolean first = !"false".equals(sfirst);
+	String slast = request.getParameter("last");
+	boolean last = !"false".equals(slast);
+	boolean lastWasEditor = false;
+	boolean lastWasProperty = false;
+	boolean firstNoFrameMember = true; 
+	boolean firstFrameMember = false; 
 	while (it.hasNext()) {	// WHILE hasNext
 		MetaMember m = (MetaMember) it.next();
-		int frameWidth = view.isVariousMembersInSameLine(m)?0:100;
+		lastWasProperty = false;	
+		int frameWidth = view.isVariousMembersInSameLine(m)?0:100;	
+		if (!PropertiesSeparator.INSTANCE.equals(m)) {	// IF Not Properties Separator 
+			if (firstNoFrameMember && !hasFrame(m, view)) {	// IF First NoFramed Member 		
+					firstNoFrameMember = false;
+					firstFrameMember = true;	
+				if (request.getAttribute(LAST_TABLE_NOT_CLOSED) == null) {	// IF Last Table Closed
+%>
+	</tr>
+	<tr>
+		<td>
+			<table>
+				<tr>
+<%
+				} // END IF Last Table Closed
+				else {	// IF Last Table Not Closed
+					request.removeAttribute(LAST_TABLE_NOT_CLOSED);
+				} // END IF Last Table Not Closed
+			} // END IF First NoFramed Member
+			else if (firstFrameMember && hasFrame(m, view)) {	// IF First Framed Member
+				firstFrameMember = false;
+				firstNoFrameMember = true;
+%>
+			</table>
+<%	
+			} // END IF First Framed Member
+		} // END If Not Properties Separator
 		if (m instanceof MetaProperty) {	// IF MetaProperty	
 			MetaProperty p = (MetaProperty) m;		
 			if (!PropertiesSeparator.INSTANCE.equals(m)) {	// IF Not Properties Separator	
 				boolean hasFrame = WebEditors.hasFrame(p, view.getViewName());
+				lastWasEditor = !hasFrame;
+				lastWasProperty = true;
 				String propertyKey= Ids.decorate(
 						request.getParameter("application"),
 						request.getParameter("module"),
@@ -81,17 +112,25 @@ if (!renderedView) {
 					+ "&hasFrame=" + hasFrame;		
 				boolean withFrame = hasFrame && 
 					(!view.isSection() || view.getMetaMembers().size() > 1);
+				if (withFrame || (view.isSection() && view.getMembersNames().size() ==1)) { // IF Framed and Section
+					if (first) { // IF First MetaProperty
+%>		
+	<tr>
+		<td colspan="4">
+<%	
+					}  // END IF First MetaProperty
+				} // END IF Framed and Section
 				if (withFrame) { // IF MetaPropertt With Frame			 					
 					String labelKey = Ids.decorate(
 						request.getParameter("application"),
 						request.getParameter("module"),
 						"label_" + propertyPrefix + p.getName()); 
 					String label = view.getLabelFor(p);
-%>
-			<%=closeDiv(view)%>					 
+%>					 
 			<%=style.getFrameHeaderStartDecoration(frameWidth) %>
 			<%=style.getFrameTitleStartDecoration() %>
 			<span id="<%=labelKey%>"><%=label%></span>		
+			<%@ include file="editorIcons.jsp"%>
 			<%=style.getFrameTitleEndDecoration() %>	
 			<%=style.getFrameActionsStartDecoration()%>
 <% 
@@ -110,8 +149,7 @@ if (!renderedView) {
 <%
 				if (withFrame) { // IF MetaProperty With Frame
 %>
-			<%=style.getFrameContentEndDecoration() %>
-			<%=openDiv(view)%>		
+			<%=style.getFrameContentEndDecoration() %>		
 <%
 				} // END IF MetaProperty With Frame		
 				first = false;
@@ -119,12 +157,21 @@ if (!renderedView) {
 			else { // IF Properties Separator
 				if (!it.hasNext()) break; 					
 				first = true;						
+				if (lastWasEditor && !view.isAlignedByColumns()) { // IF LastWasEditor and Not Aligned 	
 %>
-	<div class="ox-layout-new-line"></div> 			
+	</tr></table>			
+<% 
+				} // END IF LastWasEditor and Not Aligned
+				lastWasEditor = false;
+%>
+		</td>
+	</tr>
+	<tr>
 <%		
 			} // END IF Properties Separator
 		} // END IF MetaProperty
 		else { // IF Not MetaProperty
+			lastWasEditor = false;
 		  	if (m instanceof MetaReference) { // IF MetaReference
 				MetaReference ref = (MetaReference) m;
 				String referenceKey = Ids.decorate(
@@ -133,6 +180,7 @@ if (!renderedView) {
 						propertyPrefix +  ref.getName()); 
 				request.setAttribute(referenceKey, ref);
 				if (view.displayReferenceWithNoFrameEditor(ref)) { // IF Display Reference Without Frame	
+					lastWasEditor = true;			
 					String urlReferenceEditor = "reference.jsp" // in this way because websphere 6 has problems with jsp:param
 						+ "?referenceKey=" + referenceKey		
 						+ "&first=" + first
@@ -149,7 +197,15 @@ if (!renderedView) {
 					String propertyInReferencePrefix = propertyPrefix + ref.getName() + ".";
 					boolean withFrame = subview.isFrame() && 
 						(!view.isSection() || view.getMetaMembers().size() > 1);
+					lastWasEditor = !withFrame;
 					boolean firstForSubdetail = first || withFrame;
+					if (withFrame || (view.isSection() && view.getMembersNames().size() ==1)) { // IF MetaReference With Frame
+						if (first) { // IF First MetaReference	
+%>		
+	<tr><td colspan="4">
+<%	
+						} // END IF First MetaReference
+					} // END IF MetaReference With Frame
 					if (withFrame) { // IF MetaReference With Frame					 					
 						String labelKey = Ids.decorate(
 							request.getParameter("application"),
@@ -157,7 +213,6 @@ if (!renderedView) {
 							"label_" + propertyPrefix + ref.getName()); 
 						String label = view.getLabelFor(ref);
 %>				
-		<%=closeDiv(view)%>
 		<%=style.getFrameHeaderStartDecoration(frameWidth) %>
 		<%=style.getFrameTitleStartDecoration() %>
 		<span id="<%=labelKey%>"><%=label%></span>
@@ -188,15 +243,15 @@ if (!renderedView) {
 							+ "&onlyEditor=true&frame=true&composite=true"  
 							+ "&viewObject=" + viewName					
 							+ "&propertyPrefix=" + propertyInReferencePrefix 
-							+ "&first=" + firstForSubdetail;
+							+ "&first=" + firstForSubdetail  
+							+ "&last=" + !it.hasNext();
 					} // END IF Display Reference With Composite Editor		
 %>  
 		<jsp:include page="<%=urlReferenceEditor%>"/>
 <%
 					if (withFrame) { // IF MetaReference With Frame
 %>			
-		<%=style.getFrameContentEndDecoration() %>
-		<%=openDiv(view)%>		
+		<%=style.getFrameContentEndDecoration() %>		
 <%
 					} // END IF MetaReference With Frame
 				} // END Display MetaReference With Frame
@@ -210,8 +265,12 @@ if (!renderedView) {
 					!variousCollectionInLine ? "" : 
 					(firstCollectionInLine ? "float: left; " : "float: right; ") + 
 					"overflow: auto; display: block ; border: 1px solid black; width: 49%; ";
+				if (!variousCollectionInLine || (variousCollectionInLine && firstCollectionInLine)) { // IF Not Various Collection or First Collection In Line
 %>
-			<%=closeDiv(view)%>
+	<tr><td colspan="4">		
+<%
+				} // END IF Not Various Collection or First Collection In Line
+%>
 			<div style="<%=styleCollectionTogether %>">
 <%			
 				if (withFrame) { // IF MetaCollection With Frame
@@ -259,7 +318,6 @@ if (!renderedView) {
 				} // END IF MetaCollection With Frame
 %>
 			</div>
-			<%=openDiv(view)%>
 <%
 			} else if (m instanceof MetaGroup) { // IF MetaGroup
 				MetaGroup group = (MetaGroup) m;			
@@ -267,11 +325,17 @@ if (!renderedView) {
 				View subview = view.getGroupView(group.getName());			
 				context.put(request, viewName, subview);
 %>
-			<%=closeDiv(view)%>
+<%
+				if (first) { // IF First MetaGroup
+					first = false;
+%>
+		<tr><td colspan="4">
+<% 
+				} // END IF First MetaGroup
+%>
 			<%=style.getFrameHeaderStartDecoration(frameWidth)%>
 			<%=style.getFrameTitleStartDecoration()%>
-			<% String labelId = Ids.decorate(request, "label_" + view.getPropertyPrefix() + group.getName()); %>
-			<span id="<%=labelId%>"><%=group.getLabel(request)%></span>
+			<%=group.getLabel(request)%>
 			<%=style.getFrameTitleEndDecoration()%>
 			<%=style.getFrameActionsStartDecoration()%>
 <% 
@@ -287,26 +351,85 @@ if (!renderedView) {
 				<jsp:param name="viewObject" value="<%=viewName%>" />
 			</jsp:include>
 			<%=style.getFrameContentEndDecoration() %>
-			<%=openDiv(view)%>
 <%
 			} // END IF MetaGroup
 		} // END IF Not MetaProperty
 	} // END While hasNext
 %>
+<% 
+	if (lastWasEditor) { // IF Last Was Editor
+		if (!(view.isRepresentsEntityReference() || view.isRepresentsAggregate()) || view.isFrame()) { // IF Not Entity or Aggregate or Frame
+%>
+</tr></table> 
+<% 
+		} // END IF Not Entity or Aggregate or Frame
+%>
+		</td>			
+<%
+	} // END IF Last Was Editor
+%>
 
-<%=closeDiv(view)%>
 
 <% 
-	} // END if (!onlySections) {
-} // END if (!renderedView) {
+	if (firstFrameMember) {	// IF First Frame Member
+		if (!(view.isSubview() && !view.isFrame())) { // IF Not Subview and Not Frame	
+%>
+	</table>
+<%
+		} // END IF Not Subview and Not Frame
+		else { // IF Subview or Frame
+			request.setAttribute(LAST_TABLE_NOT_CLOSED, new Boolean(true));
+		} // END IF Subview or Frame 
+	} // END IF First Frame Member
+%>
+
+<% 	
+	if (view.isFrame() && 
+			!(last && view.getParent() != null && !view.getParent().isFrame()) && 			  		
+			!(!lastWasProperty && view.isSection() && view.getMembersNamesWithoutSectionsAndCollections().size() == 1 
+					&& view.getParent() != null && view.getParent().isFrame())) { // IF Frame	
+%>
+		</tr>
+	</table>
+<% 
+	} // END IF Frame
+%>
+
+
+
+<% 
+} // END IF Not Only Sections 
+
 %>
 
 <%
 if (view.hasSections()) { // IF Has Sections
 %>
-<div id="<xava:id name='<%="sections_" + viewObject%>'/>"> 
-	<jsp:include page="sections.jsp"/>
-</div>	
 <% 
+	if (!onlySections && view.isSubview() && !view.isFrame()) {  // IF Not Only Sections and Subview and Not Frame
+%> 
+	          </tr>                
+              </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+              <table>                
+                  <tr>
+                    <td>
+<%
+	} // END IF Not Only Sections and Subview and Not Frame
+%>
+	<div id="<xava:id name='<%="sections_" + viewObject%>'/>"> 
+	<jsp:include page="sections.jsp"/>
+	</div>
+	
+<%
+	if (!onlySections && view.isSubview() && !view.isFrame()) { // IF Not Only Sections and Subview and Not Frame
+%>
+		 			</td>
+<% 
+	} // END IF Not Only Sections and Subview and Not Frame
+  } // END IF using non-layout renderer
 }
 %>

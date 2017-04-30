@@ -25,8 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openxava.jpa.XPersistence;
 
-import ch.speleo.scis.model.common.*;
-import ch.speleo.scis.model.conservation.*;
+import ch.speleo.scis.model.common.Commune;
+import ch.speleo.scis.model.common.Karstologist;
 import ch.speleo.scis.model.karst.DocumentationStateEnum;
 import ch.speleo.scis.model.karst.GroundObject;
 import ch.speleo.scis.model.karst.GroundObjectTypeEnum;

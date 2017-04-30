@@ -88,7 +88,8 @@ for (int f=0; itAggregates.hasNext(); f++) {
 <td class="<%=cssCellClass%>" style="vertical-align: middle;text-align: center;padding-right: 2px; <%=style.getListCellStyle()%>">
 <nobr>
 	<%if (sortable) { %>
-	<i class="xava_handle mdi mdi-swap-vertical"></i>	
+	<img class="xava_handle" align='absmiddle'
+		src='<%=request.getContextPath()%>/<%=style.getImagesFolder()%>/<%=style.getMoveRowImage()%>' border='0' />
 	<%}%>	
 <xava:action action="<%=lineAction%>" argv='<%="row="+f + ",viewObject="+viewName%>'/>
 <% 

@@ -3,8 +3,7 @@ package ch.speleo.scis.business.imports;
 import javax.persistence.Column;
 
 import ch.speleo.scis.business.imports.EntitiesReader.EntityConverter;
-import ch.speleo.scis.model.common.*;
-import ch.speleo.scis.model.conservation.*;
+import ch.speleo.scis.model.common.Karstologist;
 
 /**
  */

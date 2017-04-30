@@ -23,7 +23,6 @@ String oxVersion = org.openxava.controller.ModuleManager.getVersion();
 
 <head>
 	<title><%=modules.getCurrentModuleDescription(request)%></title>
-	<link href="<%=request.getContextPath()%>/xava/style/layout.css?ox=<%=oxVersion%>" rel="stylesheet" type="text/css"> 
 	<link href="<%=request.getContextPath()%>/naviox/style/naviox.css?ox=<%=oxVersion%>" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/xava/style/materialdesignicons.css?ox=<%=oxVersion%>">
 	<script type='text/javascript' src='<%=request.getContextPath()%>/xava/js/dwr-engine.js?ox=<%=oxVersion%>'></script>
@@ -64,17 +63,13 @@ String oxVersion = org.openxava.controller.ModuleManager.getVersion();
 						<a href="javascript:naviox.bookmark()" title="<xava:message key='<%=modules.isCurrentBookmarked()?"unbookmark_module":"bookmark_module"%>'/>">
 							<img id="bookmark" src="<%=request.getContextPath()%>/naviox/images/bookmark-<%=modules.isCurrentBookmarked()?"on":"off"%>.png"/>
 						</a>
-					</div>				
-					<div id="module"> 	
-						<jsp:include page='<%="../xava/module.jsp?application=" + app + "&module=" + module + "&htmlHead=false"%>'/>
-					</div> 
+					</div>					
+					<jsp:include page='<%="../xava/module.jsp?application=" + app + "&module=" + module + "&htmlHead=false"%>'/>
 					<% } %>
 				</div>
 			</td>
 		</tr>
 	</table>
-	
-	<%@include file="indexExt.jsp"%>
 
 	<script type='text/javascript' src='<%=request.getContextPath()%>/naviox/js/naviox.js?ox=<%=oxVersion%>'></script> 
 	

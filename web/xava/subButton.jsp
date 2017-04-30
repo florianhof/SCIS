@@ -3,6 +3,8 @@
 <%@page import="org.openxava.util.Labels"%>
 <%@page import="java.util.Collection"%>
 <%@page import="org.openxava.controller.meta.MetaAction"%>
+<%@page import="org.openxava.controller.meta.MetaController"%>
+<%@page import="org.openxava.controller.meta.MetaControllers"%>
 <%@page import="org.openxava.controller.meta.MetaSubcontroller"%>
 
 <%@ include file="imports.jsp"%>
@@ -49,7 +51,8 @@ String spanId = Ids.decorate(request, "sc-span-" + controllerName + "_" + mode);
 	<div id="<%=id%>" class="<%=style.getSubcontroller()%>" style="display:none;">
 		<table>
 		<%
-		Collection actions = manager.getSubcontrollerMetaActions(controllerName);
+		MetaController controller = MetaControllers.getMetaController(controllerName);
+		Collection actions = controller.getMetaActions();
 		java.util.Iterator actionsIt = actions.iterator();
 		while(actionsIt.hasNext()){
 			MetaAction action = (MetaAction)actionsIt.next();

@@ -23,8 +23,8 @@ import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 import org.openxava.calculators.FalseCalculator;
 
-import ch.speleo.scis.model.common.*;
-import ch.speleo.scis.model.conservation.*;
+import ch.speleo.scis.model.common.GenericIdentity;
+import ch.speleo.scis.model.common.Karstologist;
 
 @Entity
 @Table(name = "KARST_OBJECT_DOCUMENT")

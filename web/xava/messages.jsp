@@ -13,9 +13,9 @@ if (messages.contains()) {
 	while (it.hasNext()) {		
 %>
 <tr><td class=<%=style.getWarnings()%>>
-<%=style.getWarningStartDecoration()%>
+<%=style.getMessageStartDecoration()%>
 <%=it.next()%>
-<%=style.getWarningEndDecoration()%>
+<%=style.getMessageEndDecoration()%>
 </td></tr>
 <% } %>
 </table>
@@ -37,9 +37,9 @@ if (messages.contains()) {
 	while (it.hasNext()) {		
 %>
 <tr><td class=<%=style.getInfos()%>>
-<%=style.getInfoStartDecoration()%>
+<%=style.getMessageStartDecoration()%>
 <%=it.next()%>
-<%=style.getInfoEndDecoration()%>
+<%=style.getMessageEndDecoration()%>
 </td></tr>
 <% } %>
 </table>
