@@ -1,15 +1,42 @@
 package ch.speleo.scis.model.conservation;
 
-import java.io.*;
-import java.util.*;
+import static ch.speleo.scis.persistence.typemapping.CodedEnumType.TYPE;
 
-import javax.persistence.*;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
-import org.openxava.annotations.*;
+import org.openxava.annotations.DefaultValueCalculator;
+import org.openxava.annotations.LabelFormat;
+import org.openxava.annotations.LabelFormatType;
+import org.openxava.annotations.ListProperties;
+import org.openxava.annotations.ReadOnly;
+import org.openxava.annotations.ReferenceView;
+import org.openxava.annotations.Required;
+import org.openxava.annotations.RowStyle;
+import org.openxava.annotations.Stereotype;
+import org.openxava.annotations.Tab;
+import org.openxava.annotations.View;
+import org.openxava.annotations.Views;
+import org.openxava.calculators.CurrentDateCalculator;
 
-import ch.speleo.scis.model.common.*;
-import ch.speleo.scis.model.karst.*;
+import ch.speleo.scis.business.utils.CurrentUserNickNameOrIdCalculator;
+import ch.speleo.scis.model.common.GenericIdentityWithRevision;
+import ch.speleo.scis.model.common.Identifiable;
+import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
  * Class modeling a visit of a karst object
@@ -22,486 +49,262 @@ import ch.speleo.scis.model.karst.*;
 	uniqueConstraints =
 		@UniqueConstraint(columnNames = "ID"))
 @Audited
-@Tab(properties = "visitObject.name,"
+@Tab(properties = ""
 		+ "visitDate,"
-		+ "visitName,"
-		+ "visitSurname,"
-		+ "visitState,"
-		+ "visitDescription,"
-		+ "visitTrashBool,"
-		+ "visitTrash,"
-		+ "visitSpraysBool,"
-		+ "visitSprays,"
-		+ "visitDamagesBool,"
-		+ "visitDamages,"
-		+ "visitPhotos,"
-		+ "visitMeasuresBool,"
-		+ "visitMeasures,"
-		+ "visitRemarks,"
-		+ "deleted,"
+		+ "visitor,"
+		+ "surveillance.object.name,"
+		+ "status,"
+		+ "wasteExists,"
+		+ "scribblingsExists,"
+		+ "damagesExists,"
+		+ "measureRequired, measureRemark"
 		, 
 	rowStyles = {@RowStyle(style="deletedData", property="deleted", value="true")})
 @Views({
-	@View(name = "Short", members = "visitDate,"
-			+ "visitObject,"
-			+ "visitName,"
-			+ "visitSurname"),
-	@View(members = "visitObject;"
-			+ "visitAddress [visitDate, visitName, visitSurname;"
-			+ "visitDescription];"
-			+ "depredations [visitTrashBool, visitTrash; visitSpraysBool, visitSprays; visitDamagesBool, visitDamages];"
-			+ "visitPhotos;"
-			+ "visitMeasuresBool;"
-			+ "visitMeasures;"
-			+ "visitRemarks")
+	@View(name = "Short", members = "visitDate, visitor; surveillance.object"),
+	@View(members = ""
+			+ "surveillance;"
+			+ "visitDate, visitor;"
+			+ "status, statusRemark;"
+			+ "depredations [wasteExists, wasteRemark; scribblingsExists, scribblingsRemark; damagesExists, damagesRemark];"
+			+ "photos, photograph;"
+			+ "measureRequired, measureRemark;"
+			+ "comment"),
+	@View(name=GenericIdentityWithRevision.AUDIT_VIEW_NAME, members = " auditedValues")
 })
 public class Visit
-extends GenericIdentityWithDeleted implements Serializable, Identifiable {
-    /**
-     * Serial version UID.
-     */
+extends GenericIdentityWithRevision implements Serializable, Identifiable {
+
     private static final long serialVersionUID = 5654131353056129922L;
     
-    /**
-     * Date of visit
-     */
+    private static final int REMARKS_LENGTH = 500;
+
+    @ManyToOne
+    @JoinColumn(name="SURVEILLANCE_ID", nullable = false)
+    @ReferenceView(value = "Short")
     @Required
-    @Temporal(TemporalType.DATE)
+    private Surveillance surveillance;
+    
     @Column(name = "VISIT_DATE")
+    @Temporal(TemporalType.DATE)
+    @DefaultValueCalculator(CurrentDateCalculator.class)
+    @Required
     private Date visitDate;
     
-    /**
-     * Object of visit
-     */
-    @ManyToOne
-    @JoinColumn(name="ID_VISIT_OBJECT", referencedColumnName="ID")
-    @ReferenceView(value = "Short")
-    private KarstObject visitObject;
+    @Column(name = "VISITOR", length=50)
+    @DefaultValueCalculator(CurrentUserNickNameOrIdCalculator.class)
+    private String visitor;
     
-    /**
-     * Surname of the visitor
-     */
-    @Column(name = "VISIT_SURNAME", length=25)
-    private String visitSurname;
+	@Column(name = "STATUS", nullable = false, length = ConservationStatusEnum.CODE_LENGTH)
+	@Type(type=CodedEnumType.CLASSNAME, parameters={ @Parameter(name=TYPE, value=ConservationStatusEnum.CLASSNAME)})
+    @Required
+    private ConservationStatusEnum status;
     
-    /**
-     * Name of the visitor
-     */
-    @Column(name = "VISIT_NAME", length=25)
-    private String visitName;
+    @Column(name = "STATUS_REMARK")
+    private String statusRemark;
     
-    /**
-     * Weather at the time of the visit (or just before in case it's an underground visit)
-     */
-    @Column(name = "VISIT_WEATHER", length=25)
-    @Deprecated // not needed, to be removed
-    private String visitWeather;
+    @Column(name = "WASTE_EXISTS")
+    private boolean wasteExists;
     
-    /**
-     * State ascertained by the visitor
-     */
-    @Column(name = "VISIT_STATE", length = 5000)
+    @Column(name = "WASTE_REMARK", length = REMARKS_LENGTH)
+    @LabelFormat(value=LabelFormatType.NO_LABEL, forViews="DEFAULT")
+    private String wasteRemark;
+    
+    @Column(name = "SCRIBBLINGS_EXISTS")
+    private boolean scribblingsExists;
+    
+    @Column(name = "SCRIBBLINGS_REMARK", length = REMARKS_LENGTH)
+    @LabelFormat(value=LabelFormatType.NO_LABEL, forViews="DEFAULT")
+    private String scribblingsRemark;
+    
+    @Column(name = "DAMAGES_EXISTS")
+    private boolean damagesExists;
+    
+    @Column(name = "DAMAGES_REMARK", length = REMARKS_LENGTH)
+    @LabelFormat(value=LabelFormatType.NO_LABEL, forViews="DEFAULT")
+    private String damagesRemark;
+    
+    @Column(name = "PHOTOS", length=500)
+    private String photos;
+    
+    @Column(name = "PHOTOGRAPH", length=50)
+    private String photograph;
+    
+    @Column(name = "MEASURE_REQUIRED")
+    private boolean measureRequired;
+    
+    @Column(name = "MEASURE", length=REMARKS_LENGTH)
+    @LabelFormat(value=LabelFormatType.NO_LABEL, forViews="DEFAULT")
+    private String measureRemark;
+    
+    @Column(name = "COMMENT", length=50000)
     @Stereotype("BIGTEXT_AREA")
-    private String visitState;
-    
-    /**
-     * Was there trash ?
-     */
-    
-    @Column(name = "VISIT_TRASH_BOOL")
-    private boolean visitTrashBool;
-    
-    /**
-     * Trash deplored by the visitor
-     */
-    @Column(name = "VISIT_TRASH", length = 100)
-    private String visitTrash;
-    
-    /**
-     * Were there sprays ?
-     */
-    
-    @Column(name = "VISIT_SPRAYS_BOOL")
-    private boolean visitSpraysBool;
-    
-    /**
-     * Sprays ascertained by the visitor
-     */
-    @Column(name = "VISIT_SPRAYS", length = 100)
-    private String visitSprays;
-    
-    /**
-     * Were there damages ?
-     */
-    
-    @Column(name = "VISIT_DAMAGES_BOOL")
-    private boolean visitDamagesBool;
-    
-    /**
-     * Damages ascertained by the visitor
-     */
-    @Column(name = "VISIT_DAMAGES", length = 100)
-    private String visitDamages;
-    
-    /**
-     * General description of the object when visited
-     */
-    @Column(name = "VISIT_DESCRIPTION")
-    private String visitDescription;
-    
-    /**
-     * Links to the photos of the visit
-     */
-    
-    @Column(name = "VISIT_PHOTOS")
-    private String visitPhotos;
-    
-    /**
-     * Are there measures to be taken
-     */
-    
-    @Column(name = "VISIT_MEASURES_BOOL")
-    private boolean visitMeasuresBool;
-    
-    /**
-     * What measures are to be taken
-     */
-    
-    @Column(name = "VISIT_MEASURES")
-    private String visitMeasures;
-    
-    /**
-     * Other remarks about the object
-     */
-    
-    @Column(name = "VISIT_REMARKS")
-    private String visitRemarks;
-    
-    /**
-     * Empty constructor
-     */
-    public Visit() { }
-    
-    /**
-     * Getters and setters generated by Eclipse
-     */
-    
-    /**
-     * returns visitDate
-     */
-    
-    public Date getVisitDate() {
-		return visitDate;
+    private String comment;
+
+	public Surveillance getSurveillance() {
+		return surveillance;
 	}
 
-    /**
-     * parameters visitDate
-     */
+	public void setSurveillance(Surveillance surveillance) {
+		this.surveillance = surveillance;
+	}
+
+	public Date getVisitDate() {
+		return visitDate;
+	}
 
 	public void setVisitDate(Date visitDate) {
 		this.visitDate = visitDate;
 	}
 
-    /**
-     * returns visitObject
-     */
-
-	public KarstObject getVisitObject() {
-		return visitObject;
+	public String getVisitor() {
+		return visitor;
 	}
 
-    /**
-     * parameters visitObject
-     */
-
-	public void setVisitObject(KarstObject visitObject) {
-		this.visitObject = visitObject;
+	public void setVisitor(String visitor) {
+		this.visitor = visitor;
 	}
 
-    /**
-     * returns visitSurname
-     */
-
-	public String getVisitSurname() {
-		return visitSurname;
+	public ConservationStatusEnum getStatus() {
+		return status;
 	}
 
-    /**
-     * parameters visitSurname
-     */
-
-	public void setVisitSurname(String visitSurname) {
-		this.visitSurname = visitSurname;
+	public void setStatus(ConservationStatusEnum status) {
+		this.status = status;
 	}
 
-    /**
-     * returns visitName
-     */
-
-	public String getVisitName() {
-		return visitName;
+	public String getStatusRemark() {
+		return statusRemark;
 	}
 
-    /**
-     * parameters visitName
-     */
-
-	public void setVisitName(String visitName) {
-		this.visitName = visitName;
+	public void setStatusRemark(String statusRemark) {
+		this.statusRemark = statusRemark;
 	}
 
-    /**
-     * returns visitWeather
-     */
-
-	public String getVisitWeather() {
-		return visitWeather;
+	public boolean isWasteExists() {
+		return wasteExists;
 	}
 
-    /**
-     * parameters visitWeather
-     */
-
-	public void setVisitWeather(String visitWeather) {
-		this.visitWeather = visitWeather;
+	public void setWasteExists(boolean wasteExists) {
+		this.wasteExists = wasteExists;
 	}
 
-    /**
-     * returns visitState
-     */
-
-	public String getVisitState() {
-		return visitState;
+	public String getWasteRemark() {
+		return wasteRemark;
 	}
 
-    /**
-     * parameters visitState
-     */
-
-	public void setVisitState(String visitState) {
-		this.visitState = visitState;
-	}
-	
-	 /**
-     * returns visitTrashBool
-     */
-
-	public boolean isVisitTrashBool() {
-		return visitTrashBool;
+	public void setWasteRemark(String wasteRemark) {
+		this.wasteRemark = wasteRemark;
 	}
 
-    /**
-     * parameters visitTrashBool
-     */
-
-	public void setVisitTrashBool(boolean visitTrashBool) {
-		this.visitTrashBool = visitTrashBool;
+	public boolean isScribblingsExists() {
+		return scribblingsExists;
 	}
 
-    /**
-     * returns visitTrash
-     */
-
-	public String getVisitTrash() {
-		return visitTrash;
+	public void setScribblingsExists(boolean scribblingsExists) {
+		this.scribblingsExists = scribblingsExists;
 	}
 
-    /**
-     * parameters visitTrash
-     */
-
-	public void setVisitTrash(String visitTrash) {
-		this.visitTrash = visitTrash;
-	}
-	
-	 /**
-     * returns visitSpraysBool
-     */
-
-	public boolean isVisitSpraysBool() {
-		return visitSpraysBool;
+	public String getScribblingsRemark() {
+		return scribblingsRemark;
 	}
 
-    /**
-     * parameters visitSpraysBool
-     */
-
-	public void setVisitSpraysBool(boolean visitSpraysBool) {
-		this.visitSpraysBool = visitSpraysBool;
+	public void setScribblingsRemark(String scribblingsRemark) {
+		this.scribblingsRemark = scribblingsRemark;
 	}
 
-    /**
-     * returns visitPhotos
-     */
-
-	public String getVisitSprays() {
-		return visitSprays;
+	public boolean isDamagesExists() {
+		return damagesExists;
 	}
 
-    /**
-     * parameters visitDate
-     */
-
-	public void setVisitSprays(String visitSprays) {
-		this.visitSprays = visitSprays;
-	}
-	
-	 /**
-     * returns visitDamagesBool
-     */
-
-	public boolean isVisitDamagesBool() {
-		return visitDamagesBool;
+	public void setDamagesExists(boolean damagesExists) {
+		this.damagesExists = damagesExists;
 	}
 
-    /**
-     * parameters visitDamagesBool
-     */
-
-	public void setVisitDamagesBool(boolean visitDamagesBool) {
-		this.visitDamagesBool = visitDamagesBool;
+	public String getDamagesRemark() {
+		return damagesRemark;
 	}
 
-    /**
-     * returns visitDate
-     */
-
-	public String getVisitDamages() {
-		return visitDamages;
+	public void setDamagesRemark(String damagesRemark) {
+		this.damagesRemark = damagesRemark;
 	}
 
-    /**
-     * parameters visitDate
-     */
-
-	public void setVisitDamages(String visitDamages) {
-		this.visitDamages = visitDamages;
+	public String getPhotos() {
+		return photos;
 	}
 
-    /**
-     * returns visitDate
-     */
-
-	public String getVisitDescription() {
-		return visitDescription;
+	public void setPhotos(String photos) {
+		this.photos = photos;
 	}
 
-    /**
-     * parameters visitDate
-     */
-
-	public void setVisitDescription(String visitDescription) {
-		this.visitDescription = visitDescription;
+	public String getPhotograph() {
+		return photograph;
 	}
 
-    /**
-     * returns visitDate
-     */
-
-	public String getVisitPhotos() {
-		return visitPhotos;
+	public void setPhotograph(String photograph) {
+		this.photograph = photograph;
 	}
 
-    /**
-     * parameters visitPhotos
-     */
-
-	public void setVisitPhotos(String visitPhotos) {
-		this.visitPhotos = visitPhotos;
+	public boolean isMeasureRequired() {
+		return measureRequired;
 	}
 
-    /**
-     * returns visitMeasuresBool
-     */
-
-	public boolean isVisitMeasuresBool() {
-		return visitMeasuresBool;
+	public void setMeasureRequired(boolean measureRequired) {
+		this.measureRequired = measureRequired;
 	}
 
-    /**
-     * parameters visitMeasuresBool
-     */
-
-	public void setVisitMeasuresBool(boolean visitMeasuresBool) {
-		this.visitMeasuresBool = visitMeasuresBool;
+	public String getMeasureRemark() {
+		return measureRemark;
 	}
 
-    /**
-     * returns visitMeasures
-     */
-
-	public String getVisitMeasures() {
-		return visitMeasures;
+	public void setMeasureRemark(String measureRemark) {
+		this.measureRemark = measureRemark;
 	}
 
-    /**
-     * parameters visitMeasures
-     */
-
-	public void setVisitMeasures(String visitMeasures) {
-		this.visitMeasures = visitMeasures;
+	public String getComment() {
+		return comment;
 	}
 
-    /**
-     * returns visitRemarks
-     */
-
-	public String getVisitRemarks() {
-		return visitRemarks;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
-    /**
-     * parameters visitRemarks
-     */
-
-	public void setVisitRemarks(String visitRemarks) {
-		this.visitRemarks = visitRemarks;
+	public String getBusinessId() {
+		StringBuilder builder = new StringBuilder();
+		if (visitDate != null) builder.append(new SimpleDateFormat("yyyy-MM-dd").format(visitDate)).append(" ");
+		builder.append(visitor);
+		builder.append(" @ ");
+		builder.append(surveillance.getBusinessId());
+		return builder.toString();
 	}
 
-
+    @ListProperties("revision.modificationDate, revision.username, surveillance.object.name, visitDate, visitor, "
+    		+ "status, statusRemark, wasteExists, wasteRemark, scribblingsExists, scribblingsRemark, damagesExists, damagesRemark, "
+    		+ "photos, photograph, measureRequired, measureRemark, comment")
+    @ReadOnly
+    public Collection<Visit> getAuditedValues() {
+    	return loadAuditedValues();
+    }
 
 	@Override
 	protected void writeFields(StringBuilder builder) {
 		super.writeFields(builder);
+		builder.append(", surveillance=");
+		builder.append(surveillance==null? "<null>" : surveillance.getBusinessId());
 		builder.append(", visitDate=");
 		builder.append(visitDate);
-		builder.append(", visitObject=");
-		builder.append(visitObject);
-		builder.append(", visitSurname=");
-		builder.append(visitSurname);
-		builder.append(", visitName=");
-		builder.append(visitName);
-		builder.append(", visitWeather=");
-		builder.append(visitWeather);
-		builder.append(", visitState=");
-		builder.append(visitState);
-		builder.append(", visitTrashBool=");
-		builder.append(visitTrashBool);
-		builder.append(", visitTrash=");
-		builder.append(visitTrash);
-		builder.append(", visitSpraysBool=");
-		builder.append(visitSpraysBool);
-		builder.append(", visitSprays=");
-		builder.append(visitSprays);
-		builder.append(", visitDamagesBool=");
-		builder.append(visitDamagesBool);
-		builder.append(", visitDamages=");
-		builder.append(visitDamages);
-		builder.append(", visitDescription=");
-		builder.append(visitDescription);
-		builder.append(", visitPhotos=");
-		builder.append(visitPhotos);
-		builder.append(", visitMeasuresBool=");
-		builder.append(visitMeasuresBool);
-		builder.append(", visitMeasures=");
-		builder.append(visitMeasures);
-		builder.append(", visitRemarks=");
-		builder.append(visitRemarks);
-	}
-
-	public String getBusinessId() {
-		// TODO Auto-generated method stub
-		return null;
+		builder.append(", visitDate=");
+		builder.append(visitor);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", statusRemark=");
+		builder.append(statusRemark);
+		builder.append(", measureRequired=");
+		builder.append(measureRequired);
+		builder.append(", measureRemark=");
+		builder.append(measureRemark);
+		builder.append(", comment=");
+		builder.append(comment);
 	}
     
 }

@@ -10,14 +10,13 @@ import ch.speleo.scis.model.common.Codeable;
 public enum DifficultyEnum
 implements Codeable {
 
-	VERY_EASY("0"), 
 	EASY("1"),
 	MODERATE("2"),
 	DIFFICULT("3"), 
-	VERY_DIFFICULT("4"),
-	ACROBATIC("5");
+	VERY_DIFFICULT("4");
 	
 	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.DifficultyEnum";
+	public static final int CODE_LENGTH = 1;
 
 	private final String code;
 	

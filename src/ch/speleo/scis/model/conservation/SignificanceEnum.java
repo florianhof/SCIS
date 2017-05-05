@@ -7,7 +7,7 @@ import ch.speleo.scis.model.common.Codeable;
  * @author Julien
  * @version 1.0
  */
-public enum ImportanceEnum 
+public enum SignificanceEnum 
 implements Codeable {
 
 	LOCAL("L"), 
@@ -16,11 +16,11 @@ implements Codeable {
 	NATIONAL("N"), 
 	INTERNATIONAL("I");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.ImportanceEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.SignificanceEnum";
 
 	private final String code;
 	
-	private ImportanceEnum(String code) {
+	private SignificanceEnum(String code) {
 		this.code = code;
 	}
 	
@@ -28,7 +28,7 @@ implements Codeable {
 		return this.code;
 	}
 	
-	public static ImportanceEnum fromCode(String code) {
+	public static SignificanceEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
 	}
 	

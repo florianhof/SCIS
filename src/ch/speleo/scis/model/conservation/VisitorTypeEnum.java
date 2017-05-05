@@ -2,25 +2,20 @@ package ch.speleo.scis.model.conservation;
 
 import ch.speleo.scis.model.common.Codeable;
 
-/**
- * For rating
- * @author Julien
- * @version 1.0
- */
-public enum RatingEnum
+public enum VisitorTypeEnum
 implements Codeable {
 
-	NO("0"), 
-	LOW("2"),
-	MIDDLE("4"),
-	HIGH("6");
+	CAVERS("C"), 
+	HIKERS("H"),
+	YOUNG_GROUP("Y"),
+	UNKNOWN("?");
 	
-	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.RatingEnum";
+	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.VisitorTypeEnum";
 	public static final int CODE_LENGTH = 1;
 
 	private final String code;
 	
-	private RatingEnum(String code) {
+	private VisitorTypeEnum(String code) {
 		this.code = code;
 	}
 	
@@ -28,7 +23,7 @@ implements Codeable {
 		return this.code;
 	}
 	
-	public static RatingEnum fromCode(String code) {
+	public static VisitorTypeEnum fromCode(String code) {
 		return Codeable.Utils.fromCode(code, values());
 	}
 	

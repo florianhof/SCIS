@@ -67,7 +67,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
      * Name of the karst object.
      */
     @Column(name = "NAME", length=100, nullable = false)
-	@DisplaySize(value=50, forViews="Short") 
+	@DisplaySize(value=50, forViews="Short, ShortWithId") 
     @Required
     private String name;
     /**

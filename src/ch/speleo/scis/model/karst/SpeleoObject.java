@@ -52,7 +52,8 @@ import ch.speleo.scis.persistence.utils.SimpleQueries;
 @Tab(properties = "systemNr, name, type, deleted", 
 	rowStyles = {@RowStyle(style="deletedData", property="deleted", value="true")})
 @Views({ 
-	@View(name = "Short", members = "systemNr, name, type, deleted"), 
+	@View(name = "Short", members = "name, type, length, depthAndElevation"), 
+	@View(name = "ShortWithId", members = "systemNr, name, type, deleted"), 
 	@View(members = "definition [name; systemNr; type; documentationState; comment; deleted] " +
 			"dimensions [length; depth; elevation; depthAndElevation, depthAndElevationComputed]; " +
 			"verified; manager; creationDate, lastModifDate; literature; dataHistory; document; entrances; "),
@@ -76,7 +77,7 @@ extends KarstObject implements Serializable {
     @Column(name = "TYPE", nullable = true, length=1)
     @Type(type=CodedEnumType.CLASSNAME,
     	parameters={ @Parameter(name=TYPE, value=SpeleoObjectTypeEnum.CLASSNAME)})
-	@DisplaySize(value=10, forViews="Short") 
+	@DisplaySize(value=30, forViews="Short, ShortWithId") 
     private SpeleoObjectTypeEnum type;
     /**
      * Length of the speleo object.

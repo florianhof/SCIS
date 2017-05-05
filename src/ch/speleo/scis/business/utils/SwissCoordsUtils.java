@@ -167,7 +167,7 @@ public class SwissCoordsUtils {
 	protected static final int MAP_EAST_OF_FIRST = 480000;
 	/** North coordinate [m]  of the first (top-most) swiss 1:25'000 map*/
 	protected static final int MAP_NORTH_OF_FIRST = 302000;
-	/** Maximal number of maps horizontaly */
+	/** Maximal number of maps horizontally */
 	protected static final int MAP_NR_HORIZONTAL = 20;
 	/** Offset for the number of swiss 1:25'000 map */
 	protected static final int MAP_OFSET_25K = 1000;
@@ -181,11 +181,11 @@ public class SwissCoordsUtils {
 	 *         and is inaccurate for points outside the mapped part of Switzerland. 
 	 */
 	public static Integer computeMapNr(int east, int north) {
-		// TODO Better use a GIS or a map overview, as inacurrate in all the special case. 
+		// TODO Better use a GIS or a map overview, as inaccurate in all the special case. 
 		east = SwissCoordsUtils.toLV03(east, Axis.EAST);
 		north = SwissCoordsUtils.toLV03(north, Axis.NORTH);
 		int horizontalNr = (east - MAP_EAST_OF_FIRST) / MAP_WIDTH;
-		// horizonal map nr are between 0 and 19 (even sometimes 19bis in GR)
+		// horizontal map nr are between 0 and 19 (even sometimes 19bis in GR)
 		horizontalNr = Math.min(Math.max(horizontalNr, 0), MAP_NR_HORIZONTAL - 1); 
 		int verticalNr = (MAP_NORTH_OF_FIRST - north) / MAP_HEIGHT;
 		return new Integer(MAP_OFSET_25K + (MAP_NR_HORIZONTAL * verticalNr) + horizontalNr);
@@ -195,7 +195,7 @@ public class SwissCoordsUtils {
 	 * Compute the right-angle area of a map
 	 * @param mapNr Number of the 1:25'000 map from Swisstopo.
 	 * @return The area of the given map
-	 * @deprecated Inacurrate in all the special case. Better use a GIS or a map overview. 
+	 * @deprecated Inaccurate in all the special case. Better use a GIS or a map overview. 
 	 */
 	/*public static AreaRect2D computeArea(Integer mapNr) {
 		int horizontalNr = mapNr.intValue() % (MAP_NR_HORIZONTAL);

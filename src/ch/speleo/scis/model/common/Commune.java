@@ -54,6 +54,7 @@ extends GenericIdentityWithDeleted implements Serializable, Identifiable {
     /**
      * Name of the commune.
      */
+    @Required
     @Column(name = "NAME", nullable = false, length=50)
 	@DisplaySize(value=30, forViews="Short") 
     private String name;

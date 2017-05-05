@@ -21,7 +21,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.openxava.annotations.Action;
 import org.openxava.annotations.AsEmbedded;
-import org.openxava.annotations.Collapsed;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.Depends;
 import org.openxava.annotations.DisplaySize;
@@ -66,7 +65,8 @@ import ch.speleo.scis.persistence.utils.SimpleQueries;
 @Tab(properties = "inventoryNr, baronNr, name, type, speleoObject.systemNr, deleted", 
 	rowStyles = {@RowStyle(style="deletedData", property="deleted", value="true")})
 @Views({ 
-	@View(name = "Short", members = "inventoryNr, baronNr, name, type, deleted"), 
+	@View(name = "Short", members = "name, type, commune.name"), 
+	@View(name = "ShortWithId", members = "inventoryNr, baronNr, name, type, deleted"), 
 	@View(members = "definition [name; inventoryNr, nextInventoryNrs; cantonBaron, communeBaronNr, caveBaronNr; type; comment; deleted], " +
 			"location [locationAccuracy; commune; coordEast, mapNr; coordNorth; coordAltitude]; " +
 			"verified; manager; creationDate, lastModifDate; literature; dataHistory; privacy; document; speleoObject; "),
@@ -90,7 +90,7 @@ extends KarstObject implements Serializable {
     @Column(name = "TYPE", nullable = true, length=1)
     @Type(type=CodedEnumType.CLASSNAME,
 		parameters={ @Parameter(name=CodedEnumType.TYPE, value=GroundObjectTypeEnum.CLASSNAME)})
-	@DisplaySize(value=10, forViews="Short") 
+	@DisplaySize(value=30, forViews="Short, ShortWithId") 
 	private GroundObjectTypeEnum type;
     /**
      * East coordinate (Y for geometers, X for matematicians) of the ground object.
@@ -166,7 +166,7 @@ extends KarstObject implements Serializable {
      */
     @ManyToOne
     @JoinColumn(name = "SPELEO_OBJECT_ID", nullable = true)
-    @ReferenceView(value = "Short")
+    @ReferenceView(value = "ShortWithId")
     private SpeleoObject speleoObject;
     
 

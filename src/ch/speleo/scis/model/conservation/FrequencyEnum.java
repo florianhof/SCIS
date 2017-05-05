@@ -10,13 +10,13 @@ import ch.speleo.scis.model.common.Codeable;
 public enum FrequencyEnum
 implements Codeable {
 
-	EXCEPTIONAL("0"), 
-	VERY_RARE("1"),
-	RARE("2"),
-	FREQUENT("3"), 
-	VERY_FREQUENT("4");
+	RARE("0"),
+	LOW("2"),
+	MIDDLE("4"), 
+	OFTEN("6");
 	
 	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.FrequencyEnum";
+	public static final int CODE_LENGTH = 1;
 
 	private final String code;
 	

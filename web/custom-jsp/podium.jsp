@@ -20,7 +20,7 @@
 			<th align="right"><xava:message key="place" /></th>
 			<th align="left" ><xava:label key="name" /></th>
 			<th align="right"><xava:label key="depthAndElevation" /></th>
-			<th align="right"><xava:label key="systemNr" /></th>
+			<th align="right"><xava:label key="length" /></th>
 		</tr>
 		<%
 		List<SpeleoObject> deepestCaves = podiumService.getDeepestCaves(nbCaves);
@@ -33,7 +33,7 @@
 			<td align="right"><%= i %></td>
 			<td align="left" ><%= ObjectUtils.toString(cave.getName(), "") %></td>
 			<td align="right"><%= String.format(locale, "%,d", cave.getDepthAndElevationComputed()) %></td>
-			<td align="right"><%= ObjectUtils.toString(cave.getSystemNr(), "") %></td>
+			<td align="right"><%= String.format(locale, "%,d", cave.getLength()) %></td>
 		</tr>
 		<%
 		}
@@ -46,7 +46,8 @@
 			<th align="right"><xava:message key="place" /></th>
 			<th align="left" ><xava:label key="name" /></th>
 			<th align="right"><xava:label key="length" /></th>
-			<th align="right"><xava:label key="systemNr" /></th>
+			<th align="right"><xava:label key="depthAndElevation" /></th>
+			<!--th align="right"><xava:label key="systemNr" /></th-->
 		</tr>
 		<%
 		List<SpeleoObject> longestCaves = podiumService.getLongestCaves(nbCaves);
@@ -59,7 +60,8 @@
 			<td align="right"><%= i %></td>
 			<td align="left" ><%= ObjectUtils.toString(cave.getName(), "") %></td>
 			<td align="right"><%= String.format(locale, "%,d", cave.getLength()) %></td>
-			<td align="right"><%= ObjectUtils.toString(cave.getSystemNr(), "") %></td>
+			<td align="right"><%= String.format(locale, "%,d", cave.getDepthAndElevationComputed()) %></td>
+			<!--td align="right">< %= ObjectUtils.toString(cave.getSystemNr(), "") % ></td-->
 		</tr>
 		<%
 		}
