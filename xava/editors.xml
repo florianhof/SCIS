@@ -14,10 +14,10 @@
 		<for-stereotype stereotype="TIMESTAMP" />
 	</editor>
 
-    <editor name="DocumentLibrary" url="liferayDocumentLibraryEditor.jsp" always-reload="true">
+    <!--editor name="DocumentLibrary" url="liferayDocumentLibraryEditor.jsp" always-reload="true">
         <property name="rootFolderNameOrId" value="SCIS"/>
         <property name="alsoDeleteFile" value="true"/>
         <for-stereotype stereotype="SCIS_DOCUMENT_LIBRARY" />
-    </editor>
+    </editor-->
 
 </editors>
