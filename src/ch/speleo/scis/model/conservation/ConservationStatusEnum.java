@@ -7,7 +7,7 @@ implements Codeable {
 
 	CATASTROPHIC("1"), 
 	BAD("2"),
-	AVERAGE("4"),
+	PASSABLE("4"),
 	GOOD("5");
 	
 	public static final String CLASSNAME = "ch.speleo.scis.model.conservation.ConservationStatusEnum";

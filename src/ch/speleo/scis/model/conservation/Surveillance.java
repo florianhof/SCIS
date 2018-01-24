@@ -45,7 +45,7 @@ import ch.speleo.scis.business.utils.ConditionalRequiredValidator;
 import ch.speleo.scis.business.utils.CurrentUserNickNameOrIdCalculator;
 import ch.speleo.scis.model.common.GenericIdentityWithRevision;
 import ch.speleo.scis.model.common.Identifiable;
-import ch.speleo.scis.model.karst.KarstObject;
+import ch.speleo.scis.model.karst.GroundObject;
 import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 
 /**
@@ -64,7 +64,7 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 		+ "contact,"
 		+ "object.name, "
 		+ "significance,"
-		+ "protectied,"
+		+ "reserveStatus,"
 		+ "visitorFrequency,"
 		+ "visitorType,"
 		+ "accessibility,"
@@ -76,8 +76,7 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 			+ "object; "
 			+ "creationDate, contact;"
 			+ "description;"
-			+ "significance, protectied, protectionInfo;"
-			+ "hint;"
+			+ "significance, reserveStatus, reserveInfo;"
 			+ "importance ["
 			+ "  estheticImportance, estheticRemark;"
 			+ "  historicalImportance, historicalRemark;"
@@ -96,10 +95,10 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 	@View(name=GenericIdentityWithRevision.AUDIT_VIEW_NAME, members = " auditedValues")
 })
 @EntityValidator(value=ConditionalRequiredValidator.class, properties={
-	@PropertyValue(name="required", from="protectied"),
-	@PropertyValue(name="value", from="protectionInfo"),
-	@PropertyValue(name="conditionName", value="protectied"),
-	@PropertyValue(name="valueName", value="protectionInfo")
+	@PropertyValue(name="required", from="reserveStatus"),
+	@PropertyValue(name="value", from="reserveInfo"),
+	@PropertyValue(name="conditionName", value="reserveStatus"),
+	@PropertyValue(name="valueName", value="reserveInfo")
 })
 public class Surveillance
 extends GenericIdentityWithRevision implements Serializable, Identifiable {
@@ -111,7 +110,7 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
     @ManyToOne
     @JoinColumn(name="OBJECT_ID", nullable = true)
     @ReferenceView(value = "Short")
-    private KarstObject object;
+    private GroundObject object;
     
     @Column(name = "CREATION_DATE", updatable = false)
     @Temporal(TemporalType.DATE)
@@ -127,20 +126,16 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
     @Stereotype("BIGTEXT_AREA")
     private String description;
     
-    @Column(name = "IMPORTANCE", nullable = true, length = 1)
+    @Column(name = "SIGNIFICANCE", nullable = true, length = 1)
     @Type(type=CodedEnumType.CLASSNAME, parameters={ @Parameter(name=TYPE, value=SignificanceEnum.CLASSNAME)})
     private SignificanceEnum significance;
     
-    @Column(name = "PROTECTED")
-    private Boolean protectied;
+    @Column(name = "RESERVE_STATUS")
+    private Boolean reserveStatus;
     
-    @Column(name = "PROTECTION_INFO", length=50000)
+    @Column(name = "RESERVE_INFO", length=50000)
 	@DisplaySize(value=50)
-    private String protectionInfo;
-    
-    @Column(name = "HINT", length=50000)
-	@DisplaySize(value=100)
-    private String hint;
+    private String reserveInfo;
     
     @Column(name = "ESTHETIC_IMPORTANCE", nullable = true, length = RatingEnum.CODE_LENGTH)
     @Type(type=CodedEnumType.CLASSNAME, parameters={ @Parameter(name=TYPE, value=RatingEnum.CLASSNAME)})
@@ -236,11 +231,11 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
     @ListAction("CollectionScis.add")
     private Collection<Visit> visits = new LinkedList<Visit>();
 
-    public KarstObject getObject() {
+    public GroundObject getObject() {
 		return object;
 	}
 
-	public void setObject(KarstObject object) {
+	public void setObject(GroundObject object) {
 		this.object = object;
 	}
 
@@ -276,28 +271,20 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
 		this.significance = significance;
 	}
 
-	public Boolean getProtectied() {
-		return protectied;
+	public Boolean getReserveStatus() {
+		return reserveStatus;
 	}
 
-	public void setProtectied(Boolean protectied) {
-		this.protectied = protectied;
+	public void setReserveStatus(Boolean reserveStatus) {
+		this.reserveStatus = reserveStatus;
 	}
 
-	public String getProtectionInfo() {
-		return protectionInfo;
+	public String getReserveInfo() {
+		return reserveInfo;
 	}
 
-	public void setProtectionInfo(String protectionInfo) {
-		this.protectionInfo = protectionInfo;
-	}
-
-	public String getHint() {
-		return hint;
-	}
-
-	public void setHint(String hint) {
-		this.hint = hint;
+	public void setReserveInfo(String reserveInfo) {
+		this.reserveInfo = reserveInfo;
 	}
 
 	public RatingEnum getEstheticImportance() {
@@ -480,7 +467,7 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
 		return (object != null) ? object.getBusinessId() : null;
 	}
 
-    @ListProperties("revision.modificationDate, revision.username, object.name, contact, description, significance, protectied, protectionInfo, hint, " +
+    @ListProperties("revision.modificationDate, revision.username, object.name, contact, description, significance, reserveStatus, reserveInfo, " +
     		"estheticImportance, estheticRemark, historicalImportance, historicalRemark, biospeleoImportance, biospeleoRemark, " +
     		"volumeImportance, volumeRemark, paleontologicalImportance, paleontologicalRemark, geologicalImportance, geologicalRemark, " + 
     		"hydrogeoImportance, hydrogeoRemark, geomorphologicalImportance, geomorphologicalRemark, " +
@@ -503,10 +490,10 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
 		builder.append(description);
 		builder.append(", importance=");
 		builder.append(significance);
-		builder.append(", protection=");
-		builder.append(protectied);
-		builder.append(", protectionType=");
-		builder.append(protectionInfo);
+		builder.append(", reserveStatus=");
+		builder.append(reserveStatus);
+		builder.append(", reserveInfo=");
+		builder.append(reserveInfo);
 		builder.append(", visitorFrequency=");
 		builder.append(visitorFrequency);
 		builder.append(", visitorType=");

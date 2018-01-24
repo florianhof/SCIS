@@ -67,7 +67,7 @@ import ch.speleo.scis.persistence.typemapping.CodedEnumType;
 			+ "visitDate, visitor;"
 			+ "status, statusRemark;"
 			+ "depredations [wasteExists, wasteRemark; scribblingsExists, scribblingsRemark; damagesExists, damagesRemark];"
-			+ "photos, photograph;"
+			+ "photosExist, photograph;"
 			+ "measureRequired, measureRemark;"
 			+ "comment"),
 	@View(name=GenericIdentityWithRevision.AUDIT_VIEW_NAME, members = " auditedValues")
@@ -124,8 +124,8 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
     @LabelFormat(value=LabelFormatType.NO_LABEL, forViews="DEFAULT")
     private String damagesRemark;
     
-    @Column(name = "PHOTOS", length=500)
-    private String photos;
+    @Column(name = "PHOTOS_EXIST")
+    private boolean photosExist;
     
     @Column(name = "PHOTOGRAPH", length=50)
     private String photograph;
@@ -229,12 +229,12 @@ extends GenericIdentityWithRevision implements Serializable, Identifiable {
 		this.damagesRemark = damagesRemark;
 	}
 
-	public String getPhotos() {
-		return photos;
+	public boolean getPhotosExist() {
+		return photosExist;
 	}
 
-	public void setPhotos(String photos) {
-		this.photos = photos;
+	public void setPhotosExist(boolean photos) {
+		this.photosExist = photos;
 	}
 
 	public String getPhotograph() {
